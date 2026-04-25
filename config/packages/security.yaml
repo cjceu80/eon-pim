@@ -1,0 +1,54 @@
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        App\Security\FrontendUser: 'auto'
+
+    providers:
+        pimcore_admin:
+            id: Pimcore\Security\User\UserProvider
+        frontend_users:
+            id: App\Security\FrontendUserProvider
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        # Pimcore WebDAV HTTP basic // DO NOT CHANGE!
+        pimcore_webdav:
+            pattern: ^/asset/webdav
+            provider: pimcore_admin
+            http_basic: ~
+
+        # Pimcore Admin Bundle firewall
+        pimcore_admin: '%pimcore_admin_bundle.firewall_settings%'
+
+        frontend:
+            lazy: true
+            provider: frontend_users
+            form_login:
+                login_path: frontend_login
+                check_path: frontend_login
+                default_target_path: frontend_dashboard
+                enable_csrf: false
+            logout:
+                path: frontend_logout
+                target: frontend_login
+
+    access_control:
+        - { path: ^/account/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/account/register$, roles: PUBLIC_ACCESS }
+        # Pimcore admin ACl  // DO NOT CHANGE!
+        - { path: ^/admin/settings/display-custom-logo, roles: PUBLIC_ACCESS }
+        - { path: ^/admin/login/2fa-verify, roles: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+        - { path: ^/admin/login/2fa-setup, roles: ROLE_PIMCORE_USER }
+        - { path: ^/admin/login/2fa, roles: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+        - { path: ^/admin/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/admin/login/(login|lostpassword|deeplink|csrf-token)$, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_PIMCORE_USER }
+        - { path: ^/asset/webdav, roles: ROLE_PIMCORE_USER }
+        - { path: ^/account, roles: ROLE_FRONTEND_USER }
+
+    role_hierarchy:
+        # Pimcore admin  // DO NOT CHANGE!
+        ROLE_PIMCORE_ADMIN: [ROLE_PIMCORE_USER]

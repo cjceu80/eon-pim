@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 720px;
+            margin: 2rem auto;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+<h1>Frontend Account</h1>
+<p>You are signed in as <strong>{{ app.user.userIdentifier }}</strong>.</p>
+<p>This protected page is the baseline for per-user document/data delivery.</p>
+<p><a href="{{ path('frontend_logout') }}">Sign out</a></p>
+</body>
+</html>

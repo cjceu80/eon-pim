@@ -1,0 +1,66 @@
+# Pimcore / Symfony
+/config/pimcore/constants.php
+/config/pimcore/parameters.yml
+/.web-server-pid
+/build/
+/phpunit.xml
+/vendor/
+
+# Environment-specific secrets
+/.env.local
+/.env.local.php
+/.env.*.local
+
+# Local instance config (keep directory structure only)
+!/config/local
+/config/local/*
+!config/local/.gitkeep
+
+# Runtime/cache/log/generated data
+/var/*
+!/var/.gitkeep
+!/var/classes/
+/var/classes/DataObject
+!/var/config
+/var/config/system.yml
+/var/config/maintenance.php
+/var/config/tag-manager.php
+/var/config/reports.php
+/var/log/*
+!/var/log/.gitkeep
+/var/tmp/*
+!/var/tmp/.gitkeep
+/var/cache/*
+!/var/cache/.gitkeep
+
+# Public runtime output
+/public/var/
+/public/bundles/
+/public/sitemap*.xml
+
+# Frontend/package managers
+/node_modules/
+/npm-debug.log*
+/yarn-debug.log*
+/yarn-error.log*
+/pnpm-debug.log*
+
+# Test and coverage artifacts
+/coverage/
+/.phpunit.result.cache
+/tests/_output/
+
+# Tool caches and local IDE files
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+.idea
+nbproject
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# OS and temp files
+.DS_Store
+Thumbs.db
+.temp
+config/pimcore/google-api-private-key.json.example
