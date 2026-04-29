@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Security\FrontendUser;
+use App\Service\FrontendUserEntityResolver;
+use App\Service\FrontendUserProfileService;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +33,8 @@ class FrontendAccountController extends AbstractController
     public function register(
         Request $request,
         Connection $connection,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        FrontendUserProfileService $frontendUserProfileService,
     ): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('frontend_dashboard');
@@ -58,6 +61,7 @@ class FrontendAccountController extends AbstractController
                 );
 
                 try {
+                    $connection->beginTransaction();
                     $connection->insert('frontend_users', [
                         'email' => $email,
                         'password' => $passwordHash,
@@ -66,12 +70,25 @@ class FrontendAccountController extends AbstractController
                         'created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
                         'updated_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
                     ]);
+                    $frontendUserId = (int) $connection->lastInsertId();
+                    $connection->commit();
+                    $frontendUserProfileService->ensureForAuthUserId($frontendUserId, $email);
 
                     $this->addFlash('success', 'Account created. You can log in now.');
 
                     return $this->redirectToRoute('frontend_login');
                 } catch (UniqueConstraintViolationException) {
+                    if ($connection->isTransactionActive()) {
+                        $connection->rollBack();
+                    }
+
                     $this->addFlash('error', 'An account with this email already exists.');
+                } catch (\Throwable) {
+                    if ($connection->isTransactionActive()) {
+                        $connection->rollBack();
+                    }
+
+                    $this->addFlash('error', 'Could not create account. Please try again.');
                 }
             }
         }
@@ -80,9 +97,11 @@ class FrontendAccountController extends AbstractController
     }
 
     #[Route('/account', name: 'frontend_dashboard', methods: ['GET'])]
-    public function dashboard(): Response
+    public function dashboard(FrontendUserEntityResolver $frontendUserEntityResolver): Response
     {
-        return $this->render('account/dashboard.html.twig');
+        return $this->render('account/dashboard.html.twig', [
+            'frontend_user_entity_id' => $frontendUserEntityResolver->resolveCurrentUserEntityId(),
+        ]);
     }
 
     #[Route('/account/logout', name: 'frontend_logout', methods: ['GET'])]

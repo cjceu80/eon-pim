@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Security\FrontendUser;
+use App\Service\FrontendUserProfileService;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -22,6 +23,7 @@ class FrontendUserCreateCommand extends Command
     public function __construct(
         private readonly Connection $connection,
         private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly FrontendUserProfileService $frontendUserProfileService,
     ) {
         parent::__construct();
     }
@@ -54,22 +56,37 @@ class FrontendUserCreateCommand extends Command
             $plainPassword
         );
 
-        $this->connection->executeStatement(
-            <<<'SQL'
+        try {
+            $this->connection->beginTransaction();
+            $this->connection->executeStatement(
+                <<<'SQL'
 INSERT INTO frontend_users (email, password, roles, is_active, created_at, updated_at)
 VALUES (:email, :password, :roles, 1, NOW(), NOW())
 ON DUPLICATE KEY UPDATE
+    id = LAST_INSERT_ID(id),
     password = VALUES(password),
     roles = VALUES(roles),
     is_active = 1,
     updated_at = NOW()
 SQL,
-            [
-                'email' => $email,
-                'password' => $passwordHash,
-                'roles' => json_encode($roles, JSON_THROW_ON_ERROR),
-            ]
-        );
+                [
+                    'email' => $email,
+                    'password' => $passwordHash,
+                    'roles' => json_encode($roles, JSON_THROW_ON_ERROR),
+                ]
+            );
+            $frontendUserId = (int) $this->connection->lastInsertId();
+            $this->connection->commit();
+            $this->frontendUserProfileService->ensureForAuthUserId($frontendUserId, $email);
+        } catch (\Throwable $exception) {
+            if ($this->connection->isTransactionActive()) {
+                $this->connection->rollBack();
+            }
+
+            $io->error(sprintf('Could not create frontend user: %s', $exception->getMessage()));
+
+            return Command::FAILURE;
+        }
 
         $io->success(sprintf('Frontend user "%s" is ready.', $email));
 
