@@ -5,6 +5,7 @@
 /build/
 /phpunit.xml
 /vendor/
+/docs/plans/
 
 # Environment-specific secrets
 /.env.local

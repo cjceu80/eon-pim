@@ -7,20 +7,24 @@
  * Fields Summary:
  * - externalId [input]
  * - owner [manyToOneRelation]
+ * - ruleSet [manyToOneRelation]
  * - templateRef [manyToOneRelation]
- * - status [select]
+ * - templateExternalId [input]
+ * - changeType [select]
  * - name [input]
- * - isActive [checkbox]
+ * - description [textarea]
+ * - valueJson [textarea]
+ * - isDeletedOverride [checkbox]
  */
 
 return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'dao' => NULL,
-   'id' => '2',
-   'name' => 'GameWorld',
+   'id' => '7',
+   'name' => 'RuleOverride',
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1777587539,
+   'modificationDate' => 1777587489,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -68,7 +72,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'name' => 'externalId',
              'title' => 'External Id',
              'tooltip' => '',
-             'mandatory' => true,
+             'mandatory' => false,
              'noteditable' => false,
              'index' => false,
              'locked' => false,
@@ -88,7 +92,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'regexFlags' => 
             array (
             ),
-             'unique' => true,
+             'unique' => false,
              'showCharCount' => false,
              'width' => '',
              'defaultValueGenerator' => '',
@@ -137,6 +141,48 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
           )),
           2 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation::__set_state(array(
+             'name' => 'ruleSet',
+             'title' => 'Rule Set',
+             'tooltip' => '',
+             'mandatory' => true,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => true,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'classes' => 
+            array (
+              0 => 
+              array (
+                'classes' => 'RuleSet',
+              ),
+            ),
+             'displayMode' => 'grid',
+             'pathFormatterClass' => '',
+             'assetInlineDownloadAllowed' => false,
+             'assetUploadPath' => '',
+             'allowToClearRelation' => true,
+             'objectsAllowed' => true,
+             'assetsAllowed' => false,
+             'assetTypes' => 
+            array (
+            ),
+             'documentsAllowed' => false,
+             'documentTypes' => 
+            array (
+            ),
+             'width' => '',
+          )),
+          3 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation::__set_state(array(
              'name' => 'templateRef',
              'title' => 'Template Ref',
              'tooltip' => '',
@@ -158,7 +204,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
             array (
               0 => 
               array (
-                'classes' => 'GameWorldTemplate',
+                'classes' => 'RuleTemplate',
               ),
             ),
              'displayMode' => 'grid',
@@ -177,12 +223,42 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
             ),
              'width' => '',
           )),
-          3 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Select::__set_state(array(
-             'name' => 'status',
-             'title' => 'Status',
+          4 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'templateExternalId',
+             'title' => 'Template External Id',
              'tooltip' => '',
              'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => '',
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          5 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Select::__set_state(array(
+             'name' => 'changeType',
+             'title' => 'Change Type',
+             'tooltip' => '',
+             'mandatory' => true,
              'noteditable' => false,
              'index' => false,
              'locked' => false,
@@ -200,21 +276,24 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
             array (
               0 => 
               array (
-                'key' => 'custom',
-                'value' => 'custom',
+                'key' => 'override',
+                'value' => 'override',
+                'id' => 'extModel10556-1',
               ),
               1 => 
               array (
-                'key' => 'template-derived',
-                'value' => 'template-derived',
+                'key' => 'add',
+                'value' => 'add',
+                'id' => 'extModel10556-2',
               ),
               2 => 
               array (
-                'key' => 'override',
-                'value' => 'override',
+                'key' => 'remove',
+                'value' => 'remove',
+                'id' => 'extModel10556-3',
               ),
             ),
-             'defaultValue' => 'template-derived',
+             'defaultValue' => '',
              'columnLength' => 190,
              'dynamicOptions' => false,
              'enforceValidation' => false,
@@ -224,7 +303,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'optionsProviderClass' => '',
              'optionsProviderData' => '',
           )),
-          4 => 
+          6 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
              'name' => 'name',
              'title' => 'Name',
@@ -254,10 +333,10 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
              'defaultValueGenerator' => '',
           )),
-          5 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Checkbox::__set_state(array(
-             'name' => 'isActive',
-             'title' => 'Is Active',
+          7 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Textarea::__set_state(array(
+             'name' => 'description',
+             'title' => 'Description',
              'tooltip' => '',
              'mandatory' => false,
              'noteditable' => false,
@@ -273,7 +352,57 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'blockedVarsForExport' => 
             array (
             ),
-             'defaultValue' => 1,
+             'maxLength' => NULL,
+             'showCharCount' => false,
+             'excludeFromSearchIndex' => false,
+             'height' => '',
+             'width' => '',
+          )),
+          8 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Textarea::__set_state(array(
+             'name' => 'valueJson',
+             'title' => 'Value Json',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'maxLength' => NULL,
+             'showCharCount' => false,
+             'excludeFromSearchIndex' => false,
+             'height' => '',
+             'width' => '',
+          )),
+          9 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Checkbox::__set_state(array(
+             'name' => 'isDeletedOverride',
+             'title' => 'Is Deleted Override',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => 0,
              'defaultValueGenerator' => '',
           )),
         ),

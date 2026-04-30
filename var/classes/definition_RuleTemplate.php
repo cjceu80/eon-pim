@@ -6,21 +6,22 @@
  *
  * Fields Summary:
  * - externalId [input]
- * - owner [manyToOneRelation]
- * - templateRef [manyToOneRelation]
- * - status [select]
+ * - ruleSetTemplate [manyToOneRelation]
  * - name [input]
- * - isActive [checkbox]
+ * - description [textarea]
+ * - valueJson [textarea]
+ * - sortOrder [numeric]
+ * - isReadOnly [checkbox]
  */
 
 return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'dao' => NULL,
-   'id' => '2',
-   'name' => 'GameWorld',
+   'id' => '6',
+   'name' => 'RuleTemplate',
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1777587539,
+   'modificationDate' => 1777578219,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -95,8 +96,8 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
           )),
           1 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation::__set_state(array(
-             'name' => 'owner',
-             'title' => 'Owner',
+             'name' => 'ruleSetTemplate',
+             'title' => 'Rule Set Template',
              'tooltip' => '',
              'mandatory' => true,
              'noteditable' => false,
@@ -116,7 +117,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
             array (
               0 => 
               array (
-                'classes' => 'FrontendUserProfile',
+                'classes' => 'RuleSetTemplate',
               ),
             ),
              'displayMode' => 'grid',
@@ -136,100 +137,11 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
           )),
           2 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation::__set_state(array(
-             'name' => 'templateRef',
-             'title' => 'Template Ref',
-             'tooltip' => '',
-             'mandatory' => false,
-             'noteditable' => false,
-             'index' => false,
-             'locked' => false,
-             'style' => '',
-             'permissions' => NULL,
-             'fieldtype' => '',
-             'relationType' => true,
-             'invisible' => false,
-             'visibleGridView' => false,
-             'visibleSearch' => false,
-             'blockedVarsForExport' => 
-            array (
-            ),
-             'classes' => 
-            array (
-              0 => 
-              array (
-                'classes' => 'GameWorldTemplate',
-              ),
-            ),
-             'displayMode' => 'grid',
-             'pathFormatterClass' => '',
-             'assetInlineDownloadAllowed' => false,
-             'assetUploadPath' => '',
-             'allowToClearRelation' => true,
-             'objectsAllowed' => true,
-             'assetsAllowed' => false,
-             'assetTypes' => 
-            array (
-            ),
-             'documentsAllowed' => false,
-             'documentTypes' => 
-            array (
-            ),
-             'width' => '',
-          )),
-          3 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Select::__set_state(array(
-             'name' => 'status',
-             'title' => 'Status',
-             'tooltip' => '',
-             'mandatory' => false,
-             'noteditable' => false,
-             'index' => false,
-             'locked' => false,
-             'style' => '',
-             'permissions' => NULL,
-             'fieldtype' => '',
-             'relationType' => false,
-             'invisible' => false,
-             'visibleGridView' => false,
-             'visibleSearch' => false,
-             'blockedVarsForExport' => 
-            array (
-            ),
-             'options' => 
-            array (
-              0 => 
-              array (
-                'key' => 'custom',
-                'value' => 'custom',
-              ),
-              1 => 
-              array (
-                'key' => 'template-derived',
-                'value' => 'template-derived',
-              ),
-              2 => 
-              array (
-                'key' => 'override',
-                'value' => 'override',
-              ),
-            ),
-             'defaultValue' => 'template-derived',
-             'columnLength' => 190,
-             'dynamicOptions' => false,
-             'enforceValidation' => false,
-             'defaultValueGenerator' => '',
-             'width' => '',
-             'optionsProviderType' => 'configure',
-             'optionsProviderClass' => '',
-             'optionsProviderData' => '',
-          )),
-          4 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
              'name' => 'name',
              'title' => 'Name',
              'tooltip' => '',
-             'mandatory' => false,
+             'mandatory' => true,
              'noteditable' => false,
              'index' => false,
              'locked' => false,
@@ -254,10 +166,90 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
              'defaultValueGenerator' => '',
           )),
+          3 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Textarea::__set_state(array(
+             'name' => 'description',
+             'title' => 'Description',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'maxLength' => NULL,
+             'showCharCount' => false,
+             'excludeFromSearchIndex' => false,
+             'height' => '',
+             'width' => '',
+          )),
+          4 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Textarea::__set_state(array(
+             'name' => 'valueJson',
+             'title' => 'Value Json',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'maxLength' => NULL,
+             'showCharCount' => false,
+             'excludeFromSearchIndex' => false,
+             'height' => '',
+             'width' => '',
+          )),
           5 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric::__set_state(array(
+             'name' => 'sortOrder',
+             'title' => 'Sort Order',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => NULL,
+             'integer' => true,
+             'unsigned' => false,
+             'minValue' => NULL,
+             'maxValue' => NULL,
+             'unique' => false,
+             'decimalSize' => NULL,
+             'decimalPrecision' => NULL,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          6 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Checkbox::__set_state(array(
-             'name' => 'isActive',
-             'title' => 'Is Active',
+             'name' => 'isReadOnly',
+             'title' => 'Is Read Only',
              'tooltip' => '',
              'mandatory' => false,
              'noteditable' => false,

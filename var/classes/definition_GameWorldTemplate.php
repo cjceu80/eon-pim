@@ -6,21 +6,20 @@
  *
  * Fields Summary:
  * - externalId [input]
- * - owner [manyToOneRelation]
- * - templateRef [manyToOneRelation]
- * - status [select]
+ * - source [input]
+ * - version [input]
  * - name [input]
- * - isActive [checkbox]
+ * - isReadOnly [checkbox]
  */
 
 return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'dao' => NULL,
-   'id' => '2',
-   'name' => 'GameWorld',
+   'id' => '8',
+   'name' => 'GameWorldTemplate',
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1777587539,
+   'modificationDate' => 1777584571,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -94,93 +93,9 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'defaultValueGenerator' => '',
           )),
           1 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation::__set_state(array(
-             'name' => 'owner',
-             'title' => 'Owner',
-             'tooltip' => '',
-             'mandatory' => true,
-             'noteditable' => false,
-             'index' => false,
-             'locked' => false,
-             'style' => '',
-             'permissions' => NULL,
-             'fieldtype' => '',
-             'relationType' => true,
-             'invisible' => false,
-             'visibleGridView' => false,
-             'visibleSearch' => false,
-             'blockedVarsForExport' => 
-            array (
-            ),
-             'classes' => 
-            array (
-              0 => 
-              array (
-                'classes' => 'FrontendUserProfile',
-              ),
-            ),
-             'displayMode' => 'grid',
-             'pathFormatterClass' => '',
-             'assetInlineDownloadAllowed' => false,
-             'assetUploadPath' => '',
-             'allowToClearRelation' => true,
-             'objectsAllowed' => true,
-             'assetsAllowed' => false,
-             'assetTypes' => 
-            array (
-            ),
-             'documentsAllowed' => false,
-             'documentTypes' => 
-            array (
-            ),
-             'width' => '',
-          )),
-          2 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation::__set_state(array(
-             'name' => 'templateRef',
-             'title' => 'Template Ref',
-             'tooltip' => '',
-             'mandatory' => false,
-             'noteditable' => false,
-             'index' => false,
-             'locked' => false,
-             'style' => '',
-             'permissions' => NULL,
-             'fieldtype' => '',
-             'relationType' => true,
-             'invisible' => false,
-             'visibleGridView' => false,
-             'visibleSearch' => false,
-             'blockedVarsForExport' => 
-            array (
-            ),
-             'classes' => 
-            array (
-              0 => 
-              array (
-                'classes' => 'GameWorldTemplate',
-              ),
-            ),
-             'displayMode' => 'grid',
-             'pathFormatterClass' => '',
-             'assetInlineDownloadAllowed' => false,
-             'assetUploadPath' => '',
-             'allowToClearRelation' => true,
-             'objectsAllowed' => true,
-             'assetsAllowed' => false,
-             'assetTypes' => 
-            array (
-            ),
-             'documentsAllowed' => false,
-             'documentTypes' => 
-            array (
-            ),
-             'width' => '',
-          )),
-          3 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Select::__set_state(array(
-             'name' => 'status',
-             'title' => 'Status',
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'source',
+             'title' => 'Source',
              'tooltip' => '',
              'mandatory' => false,
              'noteditable' => false,
@@ -196,35 +111,48 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'blockedVarsForExport' => 
             array (
             ),
-             'options' => 
-            array (
-              0 => 
-              array (
-                'key' => 'custom',
-                'value' => 'custom',
-              ),
-              1 => 
-              array (
-                'key' => 'template-derived',
-                'value' => 'template-derived',
-              ),
-              2 => 
-              array (
-                'key' => 'override',
-                'value' => 'override',
-              ),
-            ),
-             'defaultValue' => 'template-derived',
+             'defaultValue' => '',
              'columnLength' => 190,
-             'dynamicOptions' => false,
-             'enforceValidation' => false,
-             'defaultValueGenerator' => '',
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
              'width' => '',
-             'optionsProviderType' => 'configure',
-             'optionsProviderClass' => '',
-             'optionsProviderData' => '',
+             'defaultValueGenerator' => '',
           )),
-          4 => 
+          2 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'version',
+             'title' => 'Version',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => '',
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          3 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
              'name' => 'name',
              'title' => 'Name',
@@ -254,10 +182,10 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
              'defaultValueGenerator' => '',
           )),
-          5 => 
+          4 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Checkbox::__set_state(array(
-             'name' => 'isActive',
-             'title' => 'Is Active',
+             'name' => 'isReadOnly',
+             'title' => 'Is Read Only',
              'tooltip' => '',
              'mandatory' => false,
              'noteditable' => false,

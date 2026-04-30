@@ -1,43 +1,24 @@
 <?php
 
 /**
- * Inheritance: no
- * Variants: no
- *
  * Fields Summary:
- * - externalId [input]
- * - owner [manyToOneRelation]
- * - templateRef [manyToOneRelation]
- * - status [select]
- * - name [input]
- * - isActive [checkbox]
+ * - locationType [select]
+ * - parentLocation [manyToOneRelation]
+ * - climate [input]
+ * - connectedLocationRefs [manyToManyObjectRelation]
+ * - locationNotes [textarea]
  */
 
-return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
+return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
    'dao' => NULL,
-   'id' => '2',
-   'name' => 'GameWorld',
-   'title' => '',
-   'description' => '',
-   'creationDate' => NULL,
-   'modificationDate' => 1777587539,
-   'userOwner' => 2,
-   'userModification' => 2,
+   'key' => 'EntityLocationBrick',
    'parentClass' => '',
    'implementsInterfaces' => '',
-   'listingParentClass' => '',
-   'useTraits' => '',
-   'listingUseTraits' => '',
-   'encryption' => false,
-   'encryptedTables' => 
-  array (
-  ),
-   'allowInherit' => false,
-   'allowVariants' => false,
-   'showVariants' => false,
+   'title' => '',
+   'group' => '',
    'layoutDefinitions' => 
   \Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
-     'name' => 'pimcore_root',
+     'name' => NULL,
      'type' => NULL,
      'region' => NULL,
      'title' => NULL,
@@ -64,123 +45,9 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
          'children' => 
         array (
           0 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
-             'name' => 'externalId',
-             'title' => 'External Id',
-             'tooltip' => '',
-             'mandatory' => true,
-             'noteditable' => false,
-             'index' => false,
-             'locked' => false,
-             'style' => '',
-             'permissions' => NULL,
-             'fieldtype' => '',
-             'relationType' => false,
-             'invisible' => false,
-             'visibleGridView' => false,
-             'visibleSearch' => false,
-             'blockedVarsForExport' => 
-            array (
-            ),
-             'defaultValue' => '',
-             'columnLength' => 190,
-             'regex' => '',
-             'regexFlags' => 
-            array (
-            ),
-             'unique' => true,
-             'showCharCount' => false,
-             'width' => '',
-             'defaultValueGenerator' => '',
-          )),
-          1 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation::__set_state(array(
-             'name' => 'owner',
-             'title' => 'Owner',
-             'tooltip' => '',
-             'mandatory' => true,
-             'noteditable' => false,
-             'index' => false,
-             'locked' => false,
-             'style' => '',
-             'permissions' => NULL,
-             'fieldtype' => '',
-             'relationType' => true,
-             'invisible' => false,
-             'visibleGridView' => false,
-             'visibleSearch' => false,
-             'blockedVarsForExport' => 
-            array (
-            ),
-             'classes' => 
-            array (
-              0 => 
-              array (
-                'classes' => 'FrontendUserProfile',
-              ),
-            ),
-             'displayMode' => 'grid',
-             'pathFormatterClass' => '',
-             'assetInlineDownloadAllowed' => false,
-             'assetUploadPath' => '',
-             'allowToClearRelation' => true,
-             'objectsAllowed' => true,
-             'assetsAllowed' => false,
-             'assetTypes' => 
-            array (
-            ),
-             'documentsAllowed' => false,
-             'documentTypes' => 
-            array (
-            ),
-             'width' => '',
-          )),
-          2 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation::__set_state(array(
-             'name' => 'templateRef',
-             'title' => 'Template Ref',
-             'tooltip' => '',
-             'mandatory' => false,
-             'noteditable' => false,
-             'index' => false,
-             'locked' => false,
-             'style' => '',
-             'permissions' => NULL,
-             'fieldtype' => '',
-             'relationType' => true,
-             'invisible' => false,
-             'visibleGridView' => false,
-             'visibleSearch' => false,
-             'blockedVarsForExport' => 
-            array (
-            ),
-             'classes' => 
-            array (
-              0 => 
-              array (
-                'classes' => 'GameWorldTemplate',
-              ),
-            ),
-             'displayMode' => 'grid',
-             'pathFormatterClass' => '',
-             'assetInlineDownloadAllowed' => false,
-             'assetUploadPath' => '',
-             'allowToClearRelation' => true,
-             'objectsAllowed' => true,
-             'assetsAllowed' => false,
-             'assetTypes' => 
-            array (
-            ),
-             'documentsAllowed' => false,
-             'documentTypes' => 
-            array (
-            ),
-             'width' => '',
-          )),
-          3 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Select::__set_state(array(
-             'name' => 'status',
-             'title' => 'Status',
+             'name' => 'locationType',
+             'title' => 'Location Type',
              'tooltip' => '',
              'mandatory' => false,
              'noteditable' => false,
@@ -200,21 +67,31 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
             array (
               0 => 
               array (
-                'key' => 'custom',
-                'value' => 'custom',
+                'key' => 'city',
+                'value' => 'city',
               ),
               1 => 
               array (
-                'key' => 'template-derived',
-                'value' => 'template-derived',
+                'key' => 'village',
+                'value' => 'village',
               ),
               2 => 
               array (
-                'key' => 'override',
-                'value' => 'override',
+                'key' => 'dungeon',
+                'value' => 'dungeon',
+              ),
+              3 => 
+              array (
+                'key' => 'landmark',
+                'value' => 'landmark',
+              ),
+              4 => 
+              array (
+                'key' => 'region',
+                'value' => 'region',
               ),
             ),
-             'defaultValue' => 'template-derived',
+             'defaultValue' => '',
              'columnLength' => 190,
              'dynamicOptions' => false,
              'enforceValidation' => false,
@@ -224,10 +101,56 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'optionsProviderClass' => '',
              'optionsProviderData' => '',
           )),
-          4 => 
+          1 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation::__set_state(array(
+             'name' => 'parentLocation',
+             'title' => 'Parent Location',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => true,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'classes' => 
+            array (
+              0 => 
+              array (
+                'classes' => 'WorldEntityTemplate',
+              ),
+              1 => 
+              array (
+                'classes' => 'WorldEntityOverride',
+              ),
+            ),
+             'displayMode' => 'grid',
+             'pathFormatterClass' => '',
+             'assetInlineDownloadAllowed' => false,
+             'assetUploadPath' => '',
+             'allowToClearRelation' => true,
+             'objectsAllowed' => true,
+             'assetsAllowed' => false,
+             'assetTypes' => 
+            array (
+            ),
+             'documentsAllowed' => false,
+             'documentTypes' => 
+            array (
+            ),
+             'width' => '',
+          )),
+          2 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
-             'name' => 'name',
-             'title' => 'Name',
+             'name' => 'climate',
+             'title' => 'Climate',
              'tooltip' => '',
              'mandatory' => false,
              'noteditable' => false,
@@ -254,10 +177,56 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
              'defaultValueGenerator' => '',
           )),
-          5 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Checkbox::__set_state(array(
-             'name' => 'isActive',
-             'title' => 'Is Active',
+          3 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation::__set_state(array(
+             'name' => 'connectedLocationRefs',
+             'title' => 'Connected Location Refs',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => true,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'classes' => 
+            array (
+              0 => 
+              array (
+                'classes' => 'WorldEntityOverride',
+              ),
+              1 => 
+              array (
+                'classes' => 'WorldEntityTemplate',
+              ),
+            ),
+             'displayMode' => 'grid',
+             'pathFormatterClass' => '',
+             'maxItems' => NULL,
+             'visibleFields' => 
+            array (
+            ),
+             'allowToCreateNewObject' => false,
+             'allowToClearRelation' => true,
+             'optimizedAdminLoading' => false,
+             'enableTextSelection' => false,
+             'visibleFieldDefinitions' => 
+            array (
+            ),
+             'width' => '',
+             'height' => '',
+          )),
+          4 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Textarea::__set_state(array(
+             'name' => 'locationNotes',
+             'title' => 'Location Notes',
              'tooltip' => '',
              'mandatory' => false,
              'noteditable' => false,
@@ -273,8 +242,11 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'blockedVarsForExport' => 
             array (
             ),
-             'defaultValue' => 1,
-             'defaultValueGenerator' => '',
+             'maxLength' => NULL,
+             'showCharCount' => false,
+             'excludeFromSearchIndex' => false,
+             'height' => '',
+             'width' => '',
           )),
         ),
          'locked' => false,
@@ -300,45 +272,25 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
      'labelWidth' => 100,
      'labelAlign' => 'left',
   )),
-   'icon' => '',
-   'group' => '',
-   'showAppLoggerTab' => false,
-   'linkGeneratorReference' => '',
-   'previewGeneratorReference' => '',
-   'compositeIndices' => 
-  array (
-  ),
-   'showFieldLookup' => false,
-   'propertyVisibility' => 
-  array (
-    'grid' => 
-    array (
-      'id' => true,
-      'key' => false,
-      'path' => true,
-      'published' => true,
-      'modificationDate' => true,
-      'creationDate' => true,
-    ),
-    'search' => 
-    array (
-      'id' => true,
-      'key' => false,
-      'path' => true,
-      'published' => true,
-      'modificationDate' => true,
-      'creationDate' => true,
-    ),
-  ),
-   'enableGridLocking' => false,
-   'deletedDataComponents' => 
-  array (
-  ),
+   'fieldDefinitionsCache' => NULL,
    'blockedVarsForExport' => 
   array (
   ),
-   'fieldDefinitionsCache' => 
+   'activeDispatchingEvents' => 
   array (
+  ),
+   'classDefinitions' => 
+  array (
+    0 => 
+    array (
+      'classname' => 'WorldEntityOverride',
+      'fieldname' => 'payload',
+    ),
+    1 => 
+    array (
+      'classname' => 'WorldEntityTemplate',
+      'fieldname' => 'payload',
+    ),
   ),
    'activeDispatchingEvents' => 
   array (
