@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Service\Rule\RuleImportAnalyzer;
 use App\Service\Rule\RuleImporter;
+use App\Service\Rule\RuleSetTemplateInitializer;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,6 +22,7 @@ class RuleImportCommand extends Command
     public function __construct(
         private readonly RuleImportAnalyzer $ruleImportAnalyzer,
         private readonly RuleImporter $ruleImporter,
+        private readonly RuleSetTemplateInitializer $ruleSetTemplateInitializer,
     ) {
         parent::__construct();
     }
@@ -86,6 +88,25 @@ class RuleImportCommand extends Command
             return Command::SUCCESS;
         }
 
+        $document = $this->ruleImportAnalyzer->decodeImportDocument($content);
+        if (is_array($document) && $this->isAssoc($document)) {
+            /** @var array<string, mixed> $document */
+            $ruleSetBlock = $document['ruleSetTemplate'] ?? null;
+            if (is_array($ruleSetBlock)) {
+                try {
+                    $rulesetResult = $this->ruleSetTemplateInitializer->applyRuleSetTemplateBlock($ruleSetBlock, false);
+                    $io->definitionList(
+                        ['RuleSetTemplate' => $rulesetResult['created'] ? 'created' : 'updated'],
+                        ['RuleSet path' => $rulesetResult['path']],
+                    );
+                } catch (\Throwable $exception) {
+                    $io->error($exception->getMessage());
+
+                    return Command::FAILURE;
+                }
+            }
+        }
+
         $rules = $this->ruleImportAnalyzer->decodeTopLevelRules($content);
         if (null === $rules) {
             $io->error('Could not decode YAML/JSON for apply mode.');
@@ -114,5 +135,13 @@ class RuleImportCommand extends Command
         $io->success('Import persisted successfully.');
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * @param array<mixed> $array
+     */
+    private function isAssoc(array $array): bool
+    {
+        return array_keys($array) !== range(0, count($array) - 1);
     }
 }

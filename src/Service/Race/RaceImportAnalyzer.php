@@ -39,6 +39,7 @@ final class RaceImportAnalyzer
         }
 
         $categories = $decoded['categories'] ?? null;
+        $categoryExternalIds = [];
         if (!is_array($categories)) {
             $stats['errors'][] = 'root.categories must be an array.';
         } else {
@@ -52,6 +53,19 @@ final class RaceImportAnalyzer
 
                 ++$stats['categories'];
                 $this->validateCategory($category, $path, $stats);
+            }
+            if (is_string($ruleSet) && '' !== trim($ruleSet)) {
+                foreach ($categories as $index => $category) {
+                    if (!is_array($category)) {
+                        continue;
+                    }
+                    try {
+                        $categoryExternalIds[] = RaceCategoryImportUtil::resolveCategoryExternalId(trim($ruleSet), $category);
+                    } catch (\Throwable) {
+                        // validateCategory already reported missing name/externalId
+                    }
+                }
+                $categoryExternalIds = array_values(array_unique($categoryExternalIds));
             }
         }
 
@@ -68,7 +82,7 @@ final class RaceImportAnalyzer
                 }
 
                 ++$stats['races'];
-                $this->validateRace($race, $path, $stats);
+                $this->validateRace($race, $path, $stats, $categoryExternalIds);
             }
         }
 
@@ -108,31 +122,83 @@ final class RaceImportAnalyzer
     private function validateCategory(array $category, string $path, array &$stats): void
     {
         $externalId = $category['externalId'] ?? null;
-        if (!is_string($externalId) || '' === trim($externalId)) {
-            $stats['errors'][] = sprintf('%s.externalId is required.', $path);
-        }
+        $hasExternalId = is_string($externalId) && '' !== trim($externalId);
 
         $name = $category['name'] ?? null;
-        if (!is_string($name) || '' === trim($name)) {
-            $stats['errors'][] = sprintf('%s.name is required.', $path);
+        $hasName = is_string($name) && '' !== trim($name);
+
+        if (!$hasExternalId && !$hasName) {
+            $stats['errors'][] = sprintf('%s requires externalId or name.', $path);
         }
 
-        foreach (['exhaustionColumnDivisor', 'backgroundRolls'] as $numericKey) {
+        if (array_key_exists('externalId', $category) && null !== $category['externalId'] && !is_string($category['externalId'])) {
+            $stats['errors'][] = sprintf('%s.externalId must be a string if provided.', $path);
+        }
+
+        if (array_key_exists('name', $category) && null !== $category['name'] && !is_string($category['name'])) {
+            $stats['errors'][] = sprintf('%s.name must be a string if provided.', $path);
+        }
+
+        foreach (['exhaustionColumnDivisor', 'backgroundRolls', 'movementModification'] as $numericKey) {
             if (!array_key_exists($numericKey, $category)) {
                 continue;
             }
             $value = $category[$numericKey];
-            if (null !== $value && !is_int($value)) {
+            if (null === $value) {
+                continue;
+            }
+            if (!is_int($value) && !(is_float($value) && floor($value) == $value)) {
                 $stats['errors'][] = sprintf('%s.%s must be an integer if provided.', $path, $numericKey);
             }
+        }
+
+        foreach (['apparentAgeFormula', 'actualAgeFromApparentFormula', 'parentAgeFormula', 'parentStatusFormula', 'parentStatusTableRef', 'apparentAgeTableRef'] as $stringKey) {
+            if (!array_key_exists($stringKey, $category)) {
+                continue;
+            }
+            $value = $category[$stringKey];
+            if (null === $value) {
+                continue;
+            }
+            if (!is_string($value)) {
+                $stats['errors'][] = sprintf('%s.%s must be a string if provided.', $path, $stringKey);
+            }
+        }
+
+        if (isset($category['siblingFormula'])) {
+            if (!is_array($category['siblingFormula'])) {
+                $stats['errors'][] = sprintf('%s.siblingFormula must be an object.', $path);
+            } else {
+                $allowedSiblingKeys = [
+                    'numberOfLitters',
+                    'litterSize',
+                    'olderSiblingAgeFormula',
+                    'youngerSiblingAgeFormula',
+                    'genderFormula',
+                ];
+                foreach ($allowedSiblingKeys as $sk) {
+                    if (!array_key_exists($sk, $category['siblingFormula'])) {
+                        continue;
+                    }
+                    $sv = $category['siblingFormula'][$sk];
+                    if (null !== $sv && !is_string($sv)) {
+                        $stats['errors'][] = sprintf('%s.siblingFormula.%s must be a string if provided.', $path, $sk);
+                    }
+                }
+            }
+        }
+
+        if (isset($category['metadata']) && !is_array($category['metadata'])) {
+            $stats['errors'][] = sprintf('%s.metadata must be an object if provided.', $path);
         }
     }
 
     /**
      * @param array<string, mixed> $race
      * @param array{categories:int, races:int, errors:array<int, string>, warnings:array<int, string>} $stats
+     * @param array<int, string> $categoryExternalIds
      */
-    private function validateRace(array $race, string $path, array &$stats): void
+    private function validateRace(array $race, string $path, array &$stats, array $categoryExternalIds): void
     {
         $externalId = $race['externalId'] ?? null;
         if (!is_string($externalId) || '' === trim($externalId)) {
@@ -147,6 +213,12 @@ final class RaceImportAnalyzer
         $categoryExternalId = $race['categoryExternalId'] ?? null;
         if (!is_string($categoryExternalId) || '' === trim($categoryExternalId)) {
             $stats['errors'][] = sprintf('%s.categoryExternalId is required.', $path);
+        } elseif ([] !== $categoryExternalIds && !in_array(trim($categoryExternalId), $categoryExternalIds, true)) {
+            $stats['errors'][] = sprintf(
+                '%s.categoryExternalId "%s" does not match any category externalId in this file.',
+                $path,
+                trim($categoryExternalId)
+            );
         }
 
         foreach (['maleLength', 'maleWeight', 'femaleLength', 'femaleWeight'] as $numericKey) {

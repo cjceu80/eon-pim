@@ -47,9 +47,53 @@ final class RuleImportAnalyzer
     }
 
     /**
+     * @return array<string, mixed>|null
+     */
+    public function decodeImportDocument(string $content): ?array
+    {
+        return $this->decodeRaw($content);
+    }
+
+    /**
      * @return array<int, array<string, mixed>>|null
      */
     public function decodeTopLevelRules(string $content): ?array
+    {
+        $decoded = $this->decodeRaw($content);
+        if (!is_array($decoded)) {
+            return null;
+        }
+
+        /** @var array<string, mixed>|array<int, mixed> $decoded */
+        if ($this->isAssoc($decoded) && isset($decoded['rules']) && is_array($decoded['rules'])) {
+            $normalized = [];
+            foreach ($decoded['rules'] as $rule) {
+                if (is_array($rule)) {
+                    /** @var array<string, mixed> $rule */
+                    $normalized[] = $rule;
+                }
+            }
+
+            return $normalized;
+        }
+
+        $rules = $this->looksLikeSingleRuleEnvelope($decoded) ? [$decoded] : $decoded;
+
+        $normalized = [];
+        foreach ($rules as $rule) {
+            if (is_array($rule)) {
+                /** @var array<string, mixed> $rule */
+                $normalized[] = $rule;
+            }
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function decodeRaw(string $content): ?array
     {
         $decoded = json_decode($content, true);
         if (!is_array($decoded)) {
@@ -64,22 +108,7 @@ final class RuleImportAnalyzer
             }
         }
 
-        if (!is_array($decoded)) {
-            return null;
-        }
-
-        /** @var array<string, mixed>|array<int, mixed> $decoded */
-        $rules = $this->looksLikeSingleRuleEnvelope($decoded) ? [$decoded] : $decoded;
-
-        $normalized = [];
-        foreach ($rules as $rule) {
-            if (is_array($rule)) {
-                /** @var array<string, mixed> $rule */
-                $normalized[] = $rule;
-            }
-        }
-
-        return $normalized;
+        return is_array($decoded) ? $decoded : null;
     }
 
     /**

@@ -79,6 +79,150 @@ public function filterByIsReadOnly ($data, $operator = '='): static
 }
 
 /**
+* Filter by raceBaselineExhaustionColumnDivisor (Exhaustion Column Divisor)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByRaceBaselineExhaustionColumnDivisor ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("raceBaselineExhaustionColumnDivisor")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by raceBaselineBackgroundRolls (Background Rolls)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByRaceBaselineBackgroundRolls ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("raceBaselineBackgroundRolls")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by raceBaselineMovementModification (Movement Modification)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByRaceBaselineMovementModification ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("raceBaselineMovementModification")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by raceBaselineNumberOfLitters (Number Of Litters)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByRaceBaselineNumberOfLitters ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("raceBaselineNumberOfLitters")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by raceBaselineLitterSize (Litter Size)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByRaceBaselineLitterSize ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("raceBaselineLitterSize")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by raceBaselineOlderSiblingAgeFormula (Older Sibling Age Formula)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByRaceBaselineOlderSiblingAgeFormula ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("raceBaselineOlderSiblingAgeFormula")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by raceBaselineYoungerSiblingAgeFormula (Race Baseline Younger Sibling Age Formula)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByRaceBaselineYoungerSiblingAgeFormula ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("raceBaselineYoungerSiblingAgeFormula")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by raceBaselineGenderFormula (Gender Formula)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByRaceBaselineGenderFormula ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("raceBaselineGenderFormula")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by raceBaselineParentAgeFormula (Parent Age Formula)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByRaceBaselineParentAgeFormula ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("raceBaselineParentAgeFormula")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by raceBaselineParentStatusFormula (Parent Status Formula)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByRaceBaselineParentStatusFormula ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("raceBaselineParentStatusFormula")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by raceBaselineParentStatusTable (Parent Status Table)
+* @param mixed $data
+* @param string $operator SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByRaceBaselineParentStatusTable ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("raceBaselineParentStatusTable")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by raceBaselineParentStatusTableRef (Parent Status Table Ref)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByRaceBaselineParentStatusTableRef ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("raceBaselineParentStatusTableRef")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
 * Filter by calendarType (Calendar Type)
 * @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
 * @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"

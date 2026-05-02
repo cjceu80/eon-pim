@@ -10,6 +10,18 @@
  * - version [input]
  * - name [input]
  * - isReadOnly [checkbox]
+ * - raceBaselineExhaustionColumnDivisor [numeric]
+ * - raceBaselineBackgroundRolls [numeric]
+ * - raceBaselineMovementModification [numeric]
+ * - raceBaselineNumberOfLitters [input]
+ * - raceBaselineLitterSize [input]
+ * - raceBaselineOlderSiblingAgeFormula [input]
+ * - raceBaselineYoungerSiblingAgeFormula [input]
+ * - raceBaselineGenderFormula [input]
+ * - raceBaselineParentAgeFormula [input]
+ * - raceBaselineParentStatusFormula [input]
+ * - raceBaselineParentStatusTable [manyToOneRelation]
+ * - raceBaselineParentStatusTableRef [input]
  * - calendarType [select]
  * - monthsPerYear [numeric]
  * - daysPerMonth [numeric]
@@ -30,6 +42,18 @@ use Pimcore\Model\DataObject\PreGetValueHookInterface;
 * @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByVersion(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByName(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByIsReadOnly(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByRaceBaselineExhaustionColumnDivisor(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByRaceBaselineBackgroundRolls(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByRaceBaselineMovementModification(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByRaceBaselineNumberOfLitters(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByRaceBaselineLitterSize(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByRaceBaselineOlderSiblingAgeFormula(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByRaceBaselineYoungerSiblingAgeFormula(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByRaceBaselineGenderFormula(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByRaceBaselineParentAgeFormula(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByRaceBaselineParentStatusFormula(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByRaceBaselineParentStatusTable(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByRaceBaselineParentStatusTableRef(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByCalendarType(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByMonthsPerYear(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RuleSetTemplate\Listing|\Pimcore\Model\DataObject\RuleSetTemplate|null getByDaysPerMonth(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
@@ -44,6 +68,18 @@ public const FIELD_SOURCE = 'source';
 public const FIELD_VERSION = 'version';
 public const FIELD_NAME = 'name';
 public const FIELD_IS_READ_ONLY = 'isReadOnly';
+public const FIELD_RACE_BASELINE_EXHAUSTION_COLUMN_DIVISOR = 'raceBaselineExhaustionColumnDivisor';
+public const FIELD_RACE_BASELINE_BACKGROUND_ROLLS = 'raceBaselineBackgroundRolls';
+public const FIELD_RACE_BASELINE_MOVEMENT_MODIFICATION = 'raceBaselineMovementModification';
+public const FIELD_RACE_BASELINE_NUMBER_OF_LITTERS = 'raceBaselineNumberOfLitters';
+public const FIELD_RACE_BASELINE_LITTER_SIZE = 'raceBaselineLitterSize';
+public const FIELD_RACE_BASELINE_OLDER_SIBLING_AGE_FORMULA = 'raceBaselineOlderSiblingAgeFormula';
+public const FIELD_RACE_BASELINE_YOUNGER_SIBLING_AGE_FORMULA = 'raceBaselineYoungerSiblingAgeFormula';
+public const FIELD_RACE_BASELINE_GENDER_FORMULA = 'raceBaselineGenderFormula';
+public const FIELD_RACE_BASELINE_PARENT_AGE_FORMULA = 'raceBaselineParentAgeFormula';
+public const FIELD_RACE_BASELINE_PARENT_STATUS_FORMULA = 'raceBaselineParentStatusFormula';
+public const FIELD_RACE_BASELINE_PARENT_STATUS_TABLE = 'raceBaselineParentStatusTable';
+public const FIELD_RACE_BASELINE_PARENT_STATUS_TABLE_REF = 'raceBaselineParentStatusTableRef';
 public const FIELD_CALENDAR_TYPE = 'calendarType';
 public const FIELD_MONTHS_PER_YEAR = 'monthsPerYear';
 public const FIELD_DAYS_PER_MONTH = 'daysPerMonth';
@@ -58,6 +94,18 @@ protected $source;
 protected $version;
 protected $name;
 protected $isReadOnly;
+protected $raceBaselineExhaustionColumnDivisor;
+protected $raceBaselineBackgroundRolls;
+protected $raceBaselineMovementModification;
+protected $raceBaselineNumberOfLitters;
+protected $raceBaselineLitterSize;
+protected $raceBaselineOlderSiblingAgeFormula;
+protected $raceBaselineYoungerSiblingAgeFormula;
+protected $raceBaselineGenderFormula;
+protected $raceBaselineParentAgeFormula;
+protected $raceBaselineParentStatusFormula;
+protected $raceBaselineParentStatusTable;
+protected $raceBaselineParentStatusTableRef;
 protected $calendarType;
 protected $monthsPerYear;
 protected $daysPerMonth;
@@ -253,6 +301,442 @@ public function setIsReadOnly(?bool $isReadOnly): static
 	$this->markFieldDirty("isReadOnly", true);
 
 	$this->isReadOnly = $isReadOnly;
+
+	return $this;
+}
+
+/**
+* Get raceBaselineExhaustionColumnDivisor - Exhaustion Column Divisor
+* @return int|null
+*/
+public function getRaceBaselineExhaustionColumnDivisor(): ?int
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("raceBaselineExhaustionColumnDivisor");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->raceBaselineExhaustionColumnDivisor;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set raceBaselineExhaustionColumnDivisor - Exhaustion Column Divisor
+* @param int|null $raceBaselineExhaustionColumnDivisor
+* @return $this
+*/
+public function setRaceBaselineExhaustionColumnDivisor(?int $raceBaselineExhaustionColumnDivisor): static
+{
+	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	$fd = $this->getClass()->getFieldDefinition("raceBaselineExhaustionColumnDivisor");
+	$this->raceBaselineExhaustionColumnDivisor = $fd->preSetData($this, $raceBaselineExhaustionColumnDivisor);
+	return $this;
+}
+
+/**
+* Get raceBaselineBackgroundRolls - Background Rolls
+* @return float|null
+*/
+public function getRaceBaselineBackgroundRolls(): ?float
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("raceBaselineBackgroundRolls");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->raceBaselineBackgroundRolls;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set raceBaselineBackgroundRolls - Background Rolls
+* @param float|null $raceBaselineBackgroundRolls
+* @return $this
+*/
+public function setRaceBaselineBackgroundRolls(?float $raceBaselineBackgroundRolls): static
+{
+	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	$fd = $this->getClass()->getFieldDefinition("raceBaselineBackgroundRolls");
+	$this->raceBaselineBackgroundRolls = $fd->preSetData($this, $raceBaselineBackgroundRolls);
+	return $this;
+}
+
+/**
+* Get raceBaselineMovementModification - Movement Modification
+* @return int|null
+*/
+public function getRaceBaselineMovementModification(): ?int
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("raceBaselineMovementModification");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->raceBaselineMovementModification;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set raceBaselineMovementModification - Movement Modification
+* @param int|null $raceBaselineMovementModification
+* @return $this
+*/
+public function setRaceBaselineMovementModification(?int $raceBaselineMovementModification): static
+{
+	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	$fd = $this->getClass()->getFieldDefinition("raceBaselineMovementModification");
+	$this->raceBaselineMovementModification = $fd->preSetData($this, $raceBaselineMovementModification);
+	return $this;
+}
+
+/**
+* Get raceBaselineNumberOfLitters - Number Of Litters
+* @return string|null
+*/
+public function getRaceBaselineNumberOfLitters(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("raceBaselineNumberOfLitters");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->raceBaselineNumberOfLitters;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set raceBaselineNumberOfLitters - Number Of Litters
+* @param string|null $raceBaselineNumberOfLitters
+* @return $this
+*/
+public function setRaceBaselineNumberOfLitters(?string $raceBaselineNumberOfLitters): static
+{
+	$this->markFieldDirty("raceBaselineNumberOfLitters", true);
+
+	$this->raceBaselineNumberOfLitters = $raceBaselineNumberOfLitters;
+
+	return $this;
+}
+
+/**
+* Get raceBaselineLitterSize - Litter Size
+* @return string|null
+*/
+public function getRaceBaselineLitterSize(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("raceBaselineLitterSize");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->raceBaselineLitterSize;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set raceBaselineLitterSize - Litter Size
+* @param string|null $raceBaselineLitterSize
+* @return $this
+*/
+public function setRaceBaselineLitterSize(?string $raceBaselineLitterSize): static
+{
+	$this->markFieldDirty("raceBaselineLitterSize", true);
+
+	$this->raceBaselineLitterSize = $raceBaselineLitterSize;
+
+	return $this;
+}
+
+/**
+* Get raceBaselineOlderSiblingAgeFormula - Older Sibling Age Formula
+* @return string|null
+*/
+public function getRaceBaselineOlderSiblingAgeFormula(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("raceBaselineOlderSiblingAgeFormula");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->raceBaselineOlderSiblingAgeFormula;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set raceBaselineOlderSiblingAgeFormula - Older Sibling Age Formula
+* @param string|null $raceBaselineOlderSiblingAgeFormula
+* @return $this
+*/
+public function setRaceBaselineOlderSiblingAgeFormula(?string $raceBaselineOlderSiblingAgeFormula): static
+{
+	$this->markFieldDirty("raceBaselineOlderSiblingAgeFormula", true);
+
+	$this->raceBaselineOlderSiblingAgeFormula = $raceBaselineOlderSiblingAgeFormula;
+
+	return $this;
+}
+
+/**
+* Get raceBaselineYoungerSiblingAgeFormula - Race Baseline Younger Sibling Age Formula
+* @return string|null
+*/
+public function getRaceBaselineYoungerSiblingAgeFormula(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("raceBaselineYoungerSiblingAgeFormula");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->raceBaselineYoungerSiblingAgeFormula;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set raceBaselineYoungerSiblingAgeFormula - Race Baseline Younger Sibling Age Formula
+* @param string|null $raceBaselineYoungerSiblingAgeFormula
+* @return $this
+*/
+public function setRaceBaselineYoungerSiblingAgeFormula(?string $raceBaselineYoungerSiblingAgeFormula): static
+{
+	$this->markFieldDirty("raceBaselineYoungerSiblingAgeFormula", true);
+
+	$this->raceBaselineYoungerSiblingAgeFormula = $raceBaselineYoungerSiblingAgeFormula;
+
+	return $this;
+}
+
+/**
+* Get raceBaselineGenderFormula - Gender Formula
+* @return string|null
+*/
+public function getRaceBaselineGenderFormula(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("raceBaselineGenderFormula");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->raceBaselineGenderFormula;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set raceBaselineGenderFormula - Gender Formula
+* @param string|null $raceBaselineGenderFormula
+* @return $this
+*/
+public function setRaceBaselineGenderFormula(?string $raceBaselineGenderFormula): static
+{
+	$this->markFieldDirty("raceBaselineGenderFormula", true);
+
+	$this->raceBaselineGenderFormula = $raceBaselineGenderFormula;
+
+	return $this;
+}
+
+/**
+* Get raceBaselineParentAgeFormula - Parent Age Formula
+* @return string|null
+*/
+public function getRaceBaselineParentAgeFormula(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("raceBaselineParentAgeFormula");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->raceBaselineParentAgeFormula;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set raceBaselineParentAgeFormula - Parent Age Formula
+* @param string|null $raceBaselineParentAgeFormula
+* @return $this
+*/
+public function setRaceBaselineParentAgeFormula(?string $raceBaselineParentAgeFormula): static
+{
+	$this->markFieldDirty("raceBaselineParentAgeFormula", true);
+
+	$this->raceBaselineParentAgeFormula = $raceBaselineParentAgeFormula;
+
+	return $this;
+}
+
+/**
+* Get raceBaselineParentStatusFormula - Parent Status Formula
+* @return string|null
+*/
+public function getRaceBaselineParentStatusFormula(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("raceBaselineParentStatusFormula");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->raceBaselineParentStatusFormula;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set raceBaselineParentStatusFormula - Parent Status Formula
+* @param string|null $raceBaselineParentStatusFormula
+* @return $this
+*/
+public function setRaceBaselineParentStatusFormula(?string $raceBaselineParentStatusFormula): static
+{
+	$this->markFieldDirty("raceBaselineParentStatusFormula", true);
+
+	$this->raceBaselineParentStatusFormula = $raceBaselineParentStatusFormula;
+
+	return $this;
+}
+
+/**
+* Get raceBaselineParentStatusTable - Parent Status Table
+* @return 
+*/
+public function getRaceBaselineParentStatusTable(): ?\Pimcore\Model\Element\AbstractElement
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("raceBaselineParentStatusTable");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->getClass()->getFieldDefinition("raceBaselineParentStatusTable")->preGetData($this);
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set raceBaselineParentStatusTable - Parent Status Table
+* @param  $raceBaselineParentStatusTable
+* @return $this
+*/
+public function setRaceBaselineParentStatusTable(?\Pimcore\Model\Element\AbstractElement $raceBaselineParentStatusTable): static
+{
+	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation $fd */
+	$fd = $this->getClass()->getFieldDefinition("raceBaselineParentStatusTable");
+	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
+	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
+	$currentData = $this->getRaceBaselineParentStatusTable();
+	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+	$isEqual = $fd->isEqual($currentData, $raceBaselineParentStatusTable);
+	if (!$isEqual) {
+		$this->markFieldDirty("raceBaselineParentStatusTable", true);
+	}
+	$this->raceBaselineParentStatusTable = $fd->preSetData($this, $raceBaselineParentStatusTable);
+	return $this;
+}
+
+/**
+* Get raceBaselineParentStatusTableRef - Parent Status Table Ref
+* @return string|null
+*/
+public function getRaceBaselineParentStatusTableRef(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("raceBaselineParentStatusTableRef");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->raceBaselineParentStatusTableRef;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set raceBaselineParentStatusTableRef - Parent Status Table Ref
+* @param string|null $raceBaselineParentStatusTableRef
+* @return $this
+*/
+public function setRaceBaselineParentStatusTableRef(?string $raceBaselineParentStatusTableRef): static
+{
+	$this->markFieldDirty("raceBaselineParentStatusTableRef", true);
+
+	$this->raceBaselineParentStatusTableRef = $raceBaselineParentStatusTableRef;
 
 	return $this;
 }

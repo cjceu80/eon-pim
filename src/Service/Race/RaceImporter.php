@@ -79,10 +79,8 @@ final class RaceImporter
                     path: sprintf('categories[%d]', $index)
                 );
                 if (is_object($categoryObject)) {
-                    $ext = trim((string) ($categoryData['externalId'] ?? ''));
-                    if ('' !== $ext) {
-                        $categoryIndex[$ext] = $categoryObject;
-                    }
+                    $resolvedExt = RaceCategoryImportUtil::resolveCategoryExternalId($ruleSetExternalId, $categoryData);
+                    $categoryIndex[$resolvedExt] = $categoryObject;
                 }
             } catch (\Throwable $exception) {
                 $stats['errors'][] = sprintf('categories[%d] failed: %s', $index, $exception->getMessage());
@@ -142,10 +140,11 @@ final class RaceImporter
         array &$stats,
         string $path
     ): ?object {
-        $externalId = trim((string) ($categoryData['externalId'] ?? ''));
+        $externalId = RaceCategoryImportUtil::resolveCategoryExternalId($ruleSetExternalId, $categoryData);
+
         $name = trim((string) ($categoryData['name'] ?? ''));
-        if ('' === $externalId || '' === $name) {
-            throw new \InvalidArgumentException(sprintf('%s requires externalId and name.', $path));
+        if ('' === $name) {
+            $name = $externalId;
         }
 
         $folder = $this->resolveRaceCategoryFolder($ruleSetExternalId);
@@ -179,57 +178,71 @@ final class RaceImporter
         $this->setIfExists($object, 'setName', $name);
         $this->setIfExists($object, 'setDescription', is_string($categoryData['description'] ?? null) ? $categoryData['description'] : null);
 
-        if (array_key_exists('exhaustionColumnDivisor', $categoryData) && is_int($categoryData['exhaustionColumnDivisor'])) {
-            $this->setIfExists($object, 'setExhaustionColumnDivisor', $categoryData['exhaustionColumnDivisor']);
+        $exhaustion = $this->readOptionalInt($categoryData, 'exhaustionColumnDivisor');
+        if (null !== $exhaustion) {
+            $this->setIfExists($object, 'setExhaustionColumnDivisor', $exhaustion);
         }
 
-        if (array_key_exists('backgroundRolls', $categoryData) && is_int($categoryData['backgroundRolls'])) {
-            $this->setIfExists($object, 'setBackgroundRolls', $categoryData['backgroundRolls']);
+        $backgroundRolls = $this->readOptionalInt($categoryData, 'backgroundRolls');
+        if (null !== $backgroundRolls) {
+            $this->setIfExists($object, 'setBackgroundRolls', $backgroundRolls);
+        }
+
+        $movement = $this->readOptionalInt($categoryData, 'movementModification');
+        if (null !== $movement) {
+            $this->setIfExists($object, 'setMovementModification', $movement);
         }
 
         if (isset($categoryData['apparentAgeFormula']) && is_string($categoryData['apparentAgeFormula'])) {
             $this->setIfExists($object, 'setApparentAgeFormula', $categoryData['apparentAgeFormula']);
         }
 
-        $actualFromApparent = $categoryData['apparentAgeFromApparentFormula']
-            ?? $categoryData['actualAgeFromApparentFormula']
-            ?? null;
-        if (is_string($actualFromApparent)) {
-            $this->setIfExists($object, 'setApparentAgeFromApparentFormula', $actualFromApparent);
-        }
-
         if (isset($categoryData['parentAgeFormula']) && is_string($categoryData['parentAgeFormula'])) {
             $this->setIfExists($object, 'setParentAgeFormula', $categoryData['parentAgeFormula']);
         }
 
+        if (isset($categoryData['parentStatusFormula']) && is_string($categoryData['parentStatusFormula'])) {
+            $this->setIfExists($object, 'setParentStatusFormula', $categoryData['parentStatusFormula']);
+        }
+
         if (isset($categoryData['siblingFormula']) && is_array($categoryData['siblingFormula'])) {
-            $this->setIfExists(
-                $object,
-                'setSiblingFormulaJson',
-                json_encode($categoryData['siblingFormula'], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE)
-            );
+            $this->applySiblingFormulaBlock($object, $categoryData['siblingFormula']);
         }
 
-        if (isset($categoryData['parentFormula']) && is_array($categoryData['parentFormula'])) {
-            $this->setIfExists(
-                $object,
-                'setParentFormulaJson',
-                json_encode($categoryData['parentFormula'], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE)
-            );
-        }
-
+        $metadata = [];
         if (isset($categoryData['metadata']) && is_array($categoryData['metadata'])) {
+            $metadata = $categoryData['metadata'];
+        }
+        if (isset($categoryData['actualAgeFromApparentFormula']) && is_string($categoryData['actualAgeFromApparentFormula'])) {
+            $trimmed = trim($categoryData['actualAgeFromApparentFormula']);
+            if ('' !== $trimmed) {
+                $metadata['actualAgeFromApparentFormula'] = $trimmed;
+            }
+        }
+        if ([] !== $metadata) {
             $this->setIfExists(
                 $object,
                 'setMetadataJson',
-                json_encode($categoryData['metadata'], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE)
+                json_encode($metadata, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE)
             );
         }
 
-        $tableRef = $categoryData['apparentAgeTableRef'] ?? $categoryData['apparentAgeTableExternalId'] ?? null;
-        if (is_string($tableRef) && '' !== trim($tableRef)) {
-            $rollTable = $this->findRollTableTemplateByExternalId(trim($tableRef));
-            $this->setIfExists($object, 'setApparentAgeTableRef', $rollTable);
+        $apparentAgeTableSlug = $categoryData['apparentAgeTableRef'] ?? null;
+        if (is_string($apparentAgeTableSlug) && '' !== trim($apparentAgeTableSlug)) {
+            $rollTable = $this->findRollTableTemplateByExternalId(trim($apparentAgeTableSlug));
+            if (null !== $rollTable) {
+                $this->setIfExists($object, 'setApparentAgeTableRef', $rollTable);
+            }
+        }
+
+        $parentStatusRef = $categoryData['parentStatusTableRef'] ?? null;
+        if (is_string($parentStatusRef) && '' !== trim($parentStatusRef)) {
+            $trimmed = trim($parentStatusRef);
+            $this->setIfExists($object, 'setParentStatusTableRef', $trimmed);
+            $resolved = $this->findRollTableTemplateByExternalId($trimmed);
+            if (null !== $resolved) {
+                $this->setIfExists($object, 'setParentStatusTable', $resolved);
+            }
         }
 
         $this->setIfExists($object, 'setIsReadOnly', true);
@@ -246,6 +259,48 @@ final class RaceImporter
         }
 
         return $object;
+    }
+
+    /**
+     * @param array<string, mixed> $sibling
+     */
+    private function applySiblingFormulaBlock(object $object, array $sibling): void
+    {
+        $stringMap = [
+            'numberOfLitters' => 'setNumberOfLitters',
+            'litterSize' => 'setLitterSize',
+            'olderSiblingAgeFormula' => 'setOlderSiblingAgeFormula',
+            'youngerSiblingAgeFormula' => 'setYoungerSiblingAgeFormula',
+            'genderFormula' => 'setGenderFormula',
+        ];
+        foreach ($stringMap as $yamlKey => $setter) {
+            if (!array_key_exists($yamlKey, $sibling)) {
+                continue;
+            }
+            $value = $sibling[$yamlKey];
+            if (is_string($value)) {
+                $this->setIfExists($object, $setter, $value);
+            }
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function readOptionalInt(array $data, string $key): ?int
+    {
+        if (!array_key_exists($key, $data)) {
+            return null;
+        }
+        $value = $data[$key];
+        if (is_int($value)) {
+            return $value;
+        }
+        if (is_float($value) && floor($value) == $value) {
+            return (int) $value;
+        }
+
+        return null;
     }
 
     /**

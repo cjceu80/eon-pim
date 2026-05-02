@@ -11,11 +11,17 @@
  * - description [textarea]
  * - exhaustionColumnDivisor [numeric]
  * - backgroundRolls [numeric]
+ * - movementModification [numeric]
  * - apparentAgeFormula [input]
- * - apparentAgeFromApparentFormula [input]
- * - siblingFormulaJson [textarea]
- * - parentFormulaJson [textarea]
  * - parentAgeFormula [input]
+ * - parentStatusFormula [input]
+ * - parentStatusTable [manyToOneRelation]
+ * - parentStatusTableRef [input]
+ * - numberOfLitters [input]
+ * - litterSize [input]
+ * - olderSiblingAgeFormula [input]
+ * - youngerSiblingAgeFormula [input]
+ * - genderFormula [input]
  * - apparentAgeTableRef [manyToOneRelation]
  * - metadataJson [textarea]
  * - isReadOnly [checkbox]
@@ -35,11 +41,17 @@ use Pimcore\Model\DataObject\PreGetValueHookInterface;
 * @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByDescription(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByExhaustionColumnDivisor(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByBackgroundRolls(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByMovementModification(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByApparentAgeFormula(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByApparentAgeFromApparentFormula(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getBySiblingFormulaJson(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
-* @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByParentFormulaJson(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByParentAgeFormula(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByParentStatusFormula(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByParentStatusTable(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByParentStatusTableRef(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByNumberOfLitters(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByLitterSize(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByOlderSiblingAgeFormula(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByYoungerSiblingAgeFormula(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByGenderFormula(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByApparentAgeTableRef(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByMetadataJson(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RaceCategoryTemplate\Listing|\Pimcore\Model\DataObject\RaceCategoryTemplate|null getByIsReadOnly(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
@@ -54,11 +66,17 @@ public const FIELD_NAME = 'name';
 public const FIELD_DESCRIPTION = 'description';
 public const FIELD_EXHAUSTION_COLUMN_DIVISOR = 'exhaustionColumnDivisor';
 public const FIELD_BACKGROUND_ROLLS = 'backgroundRolls';
+public const FIELD_MOVEMENT_MODIFICATION = 'movementModification';
 public const FIELD_APPARENT_AGE_FORMULA = 'apparentAgeFormula';
-public const FIELD_APPARENT_AGE_FROM_APPARENT_FORMULA = 'apparentAgeFromApparentFormula';
-public const FIELD_SIBLING_FORMULA_JSON = 'siblingFormulaJson';
-public const FIELD_PARENT_FORMULA_JSON = 'parentFormulaJson';
 public const FIELD_PARENT_AGE_FORMULA = 'parentAgeFormula';
+public const FIELD_PARENT_STATUS_FORMULA = 'parentStatusFormula';
+public const FIELD_PARENT_STATUS_TABLE = 'parentStatusTable';
+public const FIELD_PARENT_STATUS_TABLE_REF = 'parentStatusTableRef';
+public const FIELD_NUMBER_OF_LITTERS = 'numberOfLitters';
+public const FIELD_LITTER_SIZE = 'litterSize';
+public const FIELD_OLDER_SIBLING_AGE_FORMULA = 'olderSiblingAgeFormula';
+public const FIELD_YOUNGER_SIBLING_AGE_FORMULA = 'youngerSiblingAgeFormula';
+public const FIELD_GENDER_FORMULA = 'genderFormula';
 public const FIELD_APPARENT_AGE_TABLE_REF = 'apparentAgeTableRef';
 public const FIELD_METADATA_JSON = 'metadataJson';
 public const FIELD_IS_READ_ONLY = 'isReadOnly';
@@ -72,11 +90,17 @@ protected $name;
 protected $description;
 protected $exhaustionColumnDivisor;
 protected $backgroundRolls;
+protected $movementModification;
 protected $apparentAgeFormula;
-protected $apparentAgeFromApparentFormula;
-protected $siblingFormulaJson;
-protected $parentFormulaJson;
 protected $parentAgeFormula;
+protected $parentStatusFormula;
+protected $parentStatusTable;
+protected $parentStatusTableRef;
+protected $numberOfLitters;
+protected $litterSize;
+protected $olderSiblingAgeFormula;
+protected $youngerSiblingAgeFormula;
+protected $genderFormula;
 protected $apparentAgeTableRef;
 protected $metadataJson;
 protected $isReadOnly;
@@ -316,6 +340,41 @@ public function setBackgroundRolls(?int $backgroundRolls): static
 }
 
 /**
+* Get movementModification - Movement Modification
+* @return int|null
+*/
+public function getMovementModification(): ?int
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("movementModification");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->movementModification;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set movementModification - Movement Modification
+* @param int|null $movementModification
+* @return $this
+*/
+public function setMovementModification(?int $movementModification): static
+{
+	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
+	$fd = $this->getClass()->getFieldDefinition("movementModification");
+	$this->movementModification = $fd->preSetData($this, $movementModification);
+	return $this;
+}
+
+/**
 * Get apparentAgeFormula - Apparent Age Formula
 * @return string|null
 */
@@ -352,114 +411,6 @@ public function setApparentAgeFormula(?string $apparentAgeFormula): static
 }
 
 /**
-* Get apparentAgeFromApparentFormula - Apparent Age From Apparent Formula
-* @return string|null
-*/
-public function getApparentAgeFromApparentFormula(): ?string
-{
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
-		$preValue = $this->preGetValue("apparentAgeFromApparentFormula");
-		if ($preValue !== null) {
-			return $preValue;
-		}
-	}
-
-	$data = $this->apparentAgeFromApparentFormula;
-
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
-		return $data->getPlain();
-	}
-
-	return $data;
-}
-
-/**
-* Set apparentAgeFromApparentFormula - Apparent Age From Apparent Formula
-* @param string|null $apparentAgeFromApparentFormula
-* @return $this
-*/
-public function setApparentAgeFromApparentFormula(?string $apparentAgeFromApparentFormula): static
-{
-	$this->markFieldDirty("apparentAgeFromApparentFormula", true);
-
-	$this->apparentAgeFromApparentFormula = $apparentAgeFromApparentFormula;
-
-	return $this;
-}
-
-/**
-* Get siblingFormulaJson - Sibling Formula Json
-* @return string|null
-*/
-public function getSiblingFormulaJson(): ?string
-{
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
-		$preValue = $this->preGetValue("siblingFormulaJson");
-		if ($preValue !== null) {
-			return $preValue;
-		}
-	}
-
-	$data = $this->siblingFormulaJson;
-
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
-		return $data->getPlain();
-	}
-
-	return $data;
-}
-
-/**
-* Set siblingFormulaJson - Sibling Formula Json
-* @param string|null $siblingFormulaJson
-* @return $this
-*/
-public function setSiblingFormulaJson(?string $siblingFormulaJson): static
-{
-	$this->markFieldDirty("siblingFormulaJson", true);
-
-	$this->siblingFormulaJson = $siblingFormulaJson;
-
-	return $this;
-}
-
-/**
-* Get parentFormulaJson - Parent Formula Json
-* @return string|null
-*/
-public function getParentFormulaJson(): ?string
-{
-	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
-		$preValue = $this->preGetValue("parentFormulaJson");
-		if ($preValue !== null) {
-			return $preValue;
-		}
-	}
-
-	$data = $this->parentFormulaJson;
-
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
-		return $data->getPlain();
-	}
-
-	return $data;
-}
-
-/**
-* Set parentFormulaJson - Parent Formula Json
-* @param string|null $parentFormulaJson
-* @return $this
-*/
-public function setParentFormulaJson(?string $parentFormulaJson): static
-{
-	$this->markFieldDirty("parentFormulaJson", true);
-
-	$this->parentFormulaJson = $parentFormulaJson;
-
-	return $this;
-}
-
-/**
 * Get parentAgeFormula - Parent Age Formula
 * @return string|null
 */
@@ -491,6 +442,301 @@ public function setParentAgeFormula(?string $parentAgeFormula): static
 	$this->markFieldDirty("parentAgeFormula", true);
 
 	$this->parentAgeFormula = $parentAgeFormula;
+
+	return $this;
+}
+
+/**
+* Get parentStatusFormula - Parent Status Formula
+* @return string|null
+*/
+public function getParentStatusFormula(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("parentStatusFormula");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->parentStatusFormula;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set parentStatusFormula - Parent Status Formula
+* @param string|null $parentStatusFormula
+* @return $this
+*/
+public function setParentStatusFormula(?string $parentStatusFormula): static
+{
+	$this->markFieldDirty("parentStatusFormula", true);
+
+	$this->parentStatusFormula = $parentStatusFormula;
+
+	return $this;
+}
+
+/**
+* Get parentStatusTable - Parent Status Table
+* @return \Pimcore\Model\DataObject\RollTableTemplate|null
+*/
+public function getParentStatusTable(): ?\Pimcore\Model\Element\AbstractElement
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("parentStatusTable");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->getClass()->getFieldDefinition("parentStatusTable")->preGetData($this);
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set parentStatusTable - Parent Status Table
+* @param \Pimcore\Model\DataObject\RollTableTemplate|null $parentStatusTable
+* @return $this
+*/
+public function setParentStatusTable(?\Pimcore\Model\Element\AbstractElement $parentStatusTable): static
+{
+	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation $fd */
+	$fd = $this->getClass()->getFieldDefinition("parentStatusTable");
+	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
+	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
+	$currentData = $this->getParentStatusTable();
+	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+	$isEqual = $fd->isEqual($currentData, $parentStatusTable);
+	if (!$isEqual) {
+		$this->markFieldDirty("parentStatusTable", true);
+	}
+	$this->parentStatusTable = $fd->preSetData($this, $parentStatusTable);
+	return $this;
+}
+
+/**
+* Get parentStatusTableRef - Parent Status Table Ref
+* @return string|null
+*/
+public function getParentStatusTableRef(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("parentStatusTableRef");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->parentStatusTableRef;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set parentStatusTableRef - Parent Status Table Ref
+* @param string|null $parentStatusTableRef
+* @return $this
+*/
+public function setParentStatusTableRef(?string $parentStatusTableRef): static
+{
+	$this->markFieldDirty("parentStatusTableRef", true);
+
+	$this->parentStatusTableRef = $parentStatusTableRef;
+
+	return $this;
+}
+
+/**
+* Get numberOfLitters - Number Of Litters
+* @return string|null
+*/
+public function getNumberOfLitters(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("numberOfLitters");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->numberOfLitters;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set numberOfLitters - Number Of Litters
+* @param string|null $numberOfLitters
+* @return $this
+*/
+public function setNumberOfLitters(?string $numberOfLitters): static
+{
+	$this->markFieldDirty("numberOfLitters", true);
+
+	$this->numberOfLitters = $numberOfLitters;
+
+	return $this;
+}
+
+/**
+* Get litterSize - Litter Size
+* @return string|null
+*/
+public function getLitterSize(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("litterSize");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->litterSize;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set litterSize - Litter Size
+* @param string|null $litterSize
+* @return $this
+*/
+public function setLitterSize(?string $litterSize): static
+{
+	$this->markFieldDirty("litterSize", true);
+
+	$this->litterSize = $litterSize;
+
+	return $this;
+}
+
+/**
+* Get olderSiblingAgeFormula - Older Sibling Age Formula
+* @return string|null
+*/
+public function getOlderSiblingAgeFormula(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("olderSiblingAgeFormula");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->olderSiblingAgeFormula;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set olderSiblingAgeFormula - Older Sibling Age Formula
+* @param string|null $olderSiblingAgeFormula
+* @return $this
+*/
+public function setOlderSiblingAgeFormula(?string $olderSiblingAgeFormula): static
+{
+	$this->markFieldDirty("olderSiblingAgeFormula", true);
+
+	$this->olderSiblingAgeFormula = $olderSiblingAgeFormula;
+
+	return $this;
+}
+
+/**
+* Get youngerSiblingAgeFormula - Race Baseline Younger Sibling Age Formula
+* @return string|null
+*/
+public function getYoungerSiblingAgeFormula(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("youngerSiblingAgeFormula");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->youngerSiblingAgeFormula;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set youngerSiblingAgeFormula - Race Baseline Younger Sibling Age Formula
+* @param string|null $youngerSiblingAgeFormula
+* @return $this
+*/
+public function setYoungerSiblingAgeFormula(?string $youngerSiblingAgeFormula): static
+{
+	$this->markFieldDirty("youngerSiblingAgeFormula", true);
+
+	$this->youngerSiblingAgeFormula = $youngerSiblingAgeFormula;
+
+	return $this;
+}
+
+/**
+* Get genderFormula - Gender Formula
+* @return string|null
+*/
+public function getGenderFormula(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("genderFormula");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->genderFormula;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set genderFormula - Gender Formula
+* @param string|null $genderFormula
+* @return $this
+*/
+public function setGenderFormula(?string $genderFormula): static
+{
+	$this->markFieldDirty("genderFormula", true);
+
+	$this->genderFormula = $genderFormula;
 
 	return $this;
 }
