@@ -78,6 +78,66 @@ public function filterByIsReadOnly ($data, $operator = '='): static
 	return $this;
 }
 
+/**
+* Filter by calendarType (Calendar Type)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByCalendarType ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("calendarType")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by monthsPerYear (Months Per Year)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByMonthsPerYear ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("monthsPerYear")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by daysPerMonth (Days Per Month)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByDaysPerMonth ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("daysPerMonth")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by daysPerWeek (Days Per Week)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByDaysPerWeek ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("daysPerWeek")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
+/**
+* Filter by weeksPerMonth (Weeks Per Month)
+* @param string|int|float|array|Model\Element\ElementInterface $data  comparison data, can be scalar or array (if operator is e.g. "IN (?)")
+* @param string $operator  SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByWeeksPerMonth ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("weeksPerMonth")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
 
 
 }

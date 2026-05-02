@@ -40,6 +40,7 @@ final class RuleImportAnalyzer
 
             ++$stats['rules'];
             $this->validateRule($rule, $path, $stats);
+
         }
 
         return $stats;
@@ -114,19 +115,130 @@ final class RuleImportAnalyzer
             $stats['errors'][] = sprintf('%s.name is required and must be a string.', $path);
         }
 
-        $payload = $rule['valueJson'] ?? $rule['data'] ?? null;
-        if (!is_array($payload)) {
-            $stats['errors'][] = sprintf('%s must include valueJson (or alias data) as an object.', $path);
+        if ($this->isCalendarRule($rule)) {
+            $this->validateCalendarRule($rule, $path, $stats);
         } else {
-            $encoded = json_encode($payload);
-            if (false === $encoded) {
-                $stats['errors'][] = sprintf('%s.valueJson could not be JSON-encoded.', $path);
+            $payload = $rule['valueJson'] ?? $rule['data'] ?? null;
+            if (!is_array($payload)) {
+                $stats['errors'][] = sprintf('%s must include valueJson (or alias data) as an object.', $path);
+            } else {
+                $encoded = json_encode($payload);
+                if (false === $encoded) {
+                    $stats['errors'][] = sprintf('%s.valueJson could not be JSON-encoded.', $path);
+                }
             }
         }
 
         if (isset($rule['sortOrder']) && !is_int($rule['sortOrder'])) {
             $stats['errors'][] = sprintf('%s.sortOrder must be an integer if provided.', $path);
         }
+    }
+
+    /**
+     * @param array<string, mixed> $rule
+     */
+    private function isCalendarRule(array $rule): bool
+    {
+        $type = $rule['ruleType'] ?? null;
+
+        return is_string($type) && 'calendar' === strtolower(trim($type));
+    }
+
+    /**
+     * @param array<string, mixed> $rule
+     * @param array{rules:int, errors:array<int, string>, warnings:array<int, string>} $stats
+     */
+    private function validateCalendarRule(array $rule, string $path, array &$stats): void
+    {
+        if (isset($rule['schemaVersion']) && !is_int($rule['schemaVersion'])) {
+            $stats['errors'][] = sprintf('%s.schemaVersion must be an integer if provided.', $path);
+        }
+
+        foreach (['numberOfMonths', 'numberOfWeeks', 'numberOfWeekdays'] as $key) {
+            if (!array_key_exists($key, $rule) || !is_int($rule[$key]) || $rule[$key] < 1) {
+                $stats['errors'][] = sprintf('%s.%s is required and must be a positive integer.', $path, $key);
+            }
+        }
+
+        foreach (['months', 'weeks', 'weekdays'] as $listKey) {
+            if (!isset($rule[$listKey]) || !is_array($rule[$listKey])) {
+                $stats['errors'][] = sprintf('%s.%s is required and must be a list.', $path, $listKey);
+
+                continue;
+            }
+            $nonEmpty = 0;
+            foreach ($rule[$listKey] as $index => $item) {
+                if (!is_string($item)) {
+                    $stats['errors'][] = sprintf('%s.%s[%d] must be a string.', $path, $listKey, $index);
+
+                    continue;
+                }
+                if ('' !== trim($item)) {
+                    ++$nonEmpty;
+                }
+            }
+            if (0 === $nonEmpty) {
+                $stats['errors'][] = sprintf('%s.%s must contain at least one non-empty name.', $path, $listKey);
+            }
+        }
+
+        if (!is_array($rule['months'] ?? null) || !is_array($rule['weeks'] ?? null) || !is_array($rule['weekdays'] ?? null)) {
+            return;
+        }
+
+        if (!is_int($rule['numberOfMonths'] ?? null) || !is_int($rule['numberOfWeeks'] ?? null) || !is_int($rule['numberOfWeekdays'] ?? null)) {
+            return;
+        }
+
+        $expectedMonths = (int) $rule['numberOfMonths'];
+        $expectedWeeks = (int) $rule['numberOfWeeks'];
+        $expectedWeekdays = (int) $rule['numberOfWeekdays'];
+
+        $monthCount = $this->countNonEmptyStrings($rule['months']);
+        $weekCount = $this->countNonEmptyStrings($rule['weeks']);
+        $weekdayCount = $this->countNonEmptyStrings($rule['weekdays']);
+
+        if ($monthCount !== $expectedMonths) {
+            $stats['errors'][] = sprintf(
+                '%s.months has %d non-empty entries but numberOfMonths is %d.',
+                $path,
+                $monthCount,
+                $expectedMonths
+            );
+        }
+
+        if ($weekCount !== $expectedWeeks) {
+            $stats['errors'][] = sprintf(
+                '%s.weeks has %d non-empty entries but numberOfWeeks is %d.',
+                $path,
+                $weekCount,
+                $expectedWeeks
+            );
+        }
+
+        if ($weekdayCount !== $expectedWeekdays) {
+            $stats['errors'][] = sprintf(
+                '%s.weekdays has %d non-empty entries but numberOfWeekdays is %d.',
+                $path,
+                $weekdayCount,
+                $expectedWeekdays
+            );
+        }
+    }
+
+    /**
+     * @param array<mixed> $items
+     */
+    private function countNonEmptyStrings(array $items): int
+    {
+        $n = 0;
+        foreach ($items as $item) {
+            if (is_string($item) && '' !== trim($item)) {
+                ++$n;
+            }
+        }
+
+        return $n;
     }
 
     /**

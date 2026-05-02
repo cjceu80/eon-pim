@@ -14,7 +14,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:rule:import',
-    description: 'Analyze/import rule YAML/JSON into RuleTemplate objects.',
+    description: 'Analyze/import rule YAML/JSON into RuleTemplate objects (including ruleType calendar).',
 )]
 class RuleImportCommand extends Command
 {
@@ -98,6 +98,7 @@ class RuleImportCommand extends Command
         $io->definitionList(
             ['Rules created' => (string) $importStats['rulesCreated']],
             ['Rules updated' => (string) $importStats['rulesUpdated']],
+            ['Calendars applied to RuleSetTemplate' => (string) ($importStats['calendarApplied'] ?? 0)],
             ['Persistence errors' => (string) count($importStats['errors'])]
         );
 

@@ -18,32 +18,84 @@ final class RuleImporter
 
     /**
      * @param array<int, array<string, mixed>> $rules
-     * @return array{rulesCreated:int, rulesUpdated:int, errors:array<int, string>}
+     * @return array{rulesCreated:int, rulesUpdated:int, calendarApplied:int, errors:array<int, string>}
      */
     public function import(array $rules, bool $dryRun = true): array
     {
         $stats = [
             'rulesCreated' => 0,
             'rulesUpdated' => 0,
+            'calendarApplied' => 0,
             'errors' => [],
         ];
 
-        if (!class_exists(self::RULE_CLASS) || !class_exists(self::RULESET_CLASS)) {
-            $stats['errors'][] = 'Required classes RuleTemplate and/or RuleSetTemplate do not exist yet.';
+        if (!class_exists(self::RULESET_CLASS)) {
+            $stats['errors'][] = 'Required class RuleSetTemplate does not exist yet.';
 
             return $stats;
         }
 
+        /** @var array<string, array<int, array{index:int, rule:array<string, mixed>}>> $calendarRulesByRuleSet */
+        $calendarRulesByRuleSet = [];
+        /** @var array<int, array{index:int, rule:array<string, mixed>}> $nonCalendarRules */
+        $nonCalendarRules = [];
         foreach ($rules as $index => $ruleData) {
+            if ($this->isCalendarRule($ruleData)) {
+                $ruleSetExternalId = trim((string) ($ruleData['ruleSet'] ?? ''));
+                if ('' === $ruleSetExternalId) {
+                    $stats['errors'][] = sprintf('rules[%d] failed: ruleSet is required for calendar rules.', $index);
+
+                    continue;
+                }
+                $calendarRulesByRuleSet[$ruleSetExternalId][] = [
+                    'index' => $index,
+                    'rule' => $ruleData,
+                ];
+
+                continue;
+            }
+
+            $nonCalendarRules[] = [
+                'index' => $index,
+                'rule' => $ruleData,
+            ];
+        }
+
+        foreach ($calendarRulesByRuleSet as $ruleSetExternalId => $entries) {
+            try {
+                $ruleSetTemplate = $this->findOrCreateRuleSetTemplate($ruleSetExternalId, $dryRun);
+                if (null === $ruleSetTemplate) {
+                    throw new \RuntimeException(sprintf('Could not resolve RuleSetTemplate for ruleSet "%s".', $ruleSetExternalId));
+                }
+
+                $this->applyCalendarsToRuleSetTemplate(
+                    ruleSetTemplate: $ruleSetTemplate,
+                    calendarEntries: $entries,
+                    dryRun: $dryRun
+                );
+                $stats['calendarApplied'] += count($entries);
+            } catch (\Throwable $exception) {
+                $firstIndex = $entries[0]['index'] ?? 0;
+                $stats['errors'][] = sprintf('rules[%d] failed: %s', $firstIndex, $exception->getMessage());
+            }
+        }
+
+        if ([] !== $nonCalendarRules && !class_exists(self::RULE_CLASS)) {
+            $stats['errors'][] = 'Required class RuleTemplate does not exist yet.';
+
+            return $stats;
+        }
+
+        foreach ($nonCalendarRules as $entry) {
             try {
                 $this->upsertRule(
-                    ruleData: $ruleData,
+                    ruleData: $entry['rule'],
                     dryRun: $dryRun,
                     stats: $stats,
-                    path: sprintf('rules[%d]', $index)
+                    path: sprintf('rules[%d]', $entry['index'])
                 );
             } catch (\Throwable $exception) {
-                $stats['errors'][] = sprintf('rules[%d] failed: %s', $index, $exception->getMessage());
+                $stats['errors'][] = sprintf('rules[%d] failed: %s', $entry['index'], $exception->getMessage());
             }
         }
 
@@ -52,7 +104,7 @@ final class RuleImporter
 
     /**
      * @param array<string, mixed> $ruleData
-     * @param array{rulesCreated:int, rulesUpdated:int, errors:array<int, string>} $stats
+     * @param array{rulesCreated:int, rulesUpdated:int, calendarApplied:int, errors:array<int, string>} $stats
      */
     private function upsertRule(
         array $ruleData,
@@ -115,10 +167,7 @@ final class RuleImporter
             $rule->setParentId((int) $rulesFolder->getId());
         }
 
-        $payload = $ruleData['valueJson'] ?? $ruleData['data'] ?? null;
-        if (!is_array($payload)) {
-            throw new \InvalidArgumentException(sprintf('%s is missing valueJson/data object.', $path));
-        }
+        $payload = $this->resolveValueJsonPayload($ruleData, $path);
 
         $this->setIfExists($rule, 'setExternalId', $externalId);
         $this->setIfExists($rule, 'setName', $name);
@@ -152,6 +201,69 @@ final class RuleImporter
             ++$stats['rulesCreated'];
         } else {
             ++$stats['rulesUpdated'];
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $ruleData
+     */
+    /**
+     * @param array<int, array{index:int, rule:array<string, mixed>}> $calendarEntries
+     */
+    private function applyCalendarsToRuleSetTemplate(object $ruleSetTemplate, array $calendarEntries, bool $dryRun): void
+    {
+        if (!is_a($ruleSetTemplate, self::RULESET_CLASS) || [] === $calendarEntries) {
+            throw new \RuntimeException('Calendar import could not resolve target RuleSetTemplate.');
+        }
+
+        $first = $calendarEntries[0];
+        $firstPath = sprintf('rules[%d]', $first['index']);
+        $basePayload = $this->buildCalendarValueJson($first['rule'], $firstPath);
+
+        $this->setIfExists($ruleSetTemplate, 'setCalendarType', 'game');
+        $this->setIfExists($ruleSetTemplate, 'setMonthsPerYear', (int) $basePayload['numberOfMonths']);
+        $this->setIfExists($ruleSetTemplate, 'setDaysPerWeek', (int) $basePayload['numberOfWeekdays']);
+
+        $weeksPerMonth = (int) $basePayload['numberOfWeeks'];
+        if ($weeksPerMonth > 0) {
+            $this->setIfExists($ruleSetTemplate, 'setWeeksPerMonth', $weeksPerMonth);
+            $daysPerMonth = $weeksPerMonth * (int) $basePayload['numberOfWeekdays'];
+            $this->setIfExists($ruleSetTemplate, 'setDaysPerMonth', $daysPerMonth);
+        }
+
+        if (class_exists(\Pimcore\Model\DataObject\Fieldcollection::class)
+            && class_exists(\Pimcore\Model\DataObject\Fieldcollection\Data\CalendarLanguageVariant::class)
+        ) {
+            $variants = new \Pimcore\Model\DataObject\Fieldcollection();
+            foreach ($calendarEntries as $entry) {
+                $path = sprintf('rules[%d]', $entry['index']);
+                $payload = $this->buildCalendarValueJson($entry['rule'], $path);
+                if ((int) $payload['numberOfMonths'] !== (int) $basePayload['numberOfMonths']
+                    || (int) $payload['numberOfWeeks'] !== (int) $basePayload['numberOfWeeks']
+                    || (int) $payload['numberOfWeekdays'] !== (int) $basePayload['numberOfWeekdays']
+                ) {
+                    throw new \InvalidArgumentException(sprintf(
+                        '%s calendar dimensions differ from other entries in the same ruleSet (months/weeks/weekdays must match).',
+                        $path
+                    ));
+                }
+
+                $variant = new \Pimcore\Model\DataObject\Fieldcollection\Data\CalendarLanguageVariant();
+                $variantKey = trim((string) ($entry['rule']['variantKey'] ?? $entry['rule']['externalId'] ?? 'calendar'));
+                $displayName = trim((string) ($entry['rule']['name'] ?? 'Calendar'));
+                $variant->setVariantKey($variantKey);
+                $variant->setDisplayName($displayName);
+                $variant->setMonthNamesList(implode("\n", $payload['months']));
+                $variant->setDayNamesList(implode("\n", $payload['weekdays']));
+                $variant->setWeekNamesList(implode("\n", $payload['weeks']));
+                $variants->add($variant);
+            }
+
+            $this->setIfExists($ruleSetTemplate, 'setCalendarVariants', $variants);
+        }
+
+        if (!$dryRun) {
+            $ruleSetTemplate->save();
         }
     }
 
@@ -253,6 +365,92 @@ final class RuleImporter
         $path = sprintf('%s/%s/RuleSets', rtrim(self::LIBRARY_ROOT, '/'), $key);
 
         return DataObjectService::createFolderByPath($path);
+    }
+
+    /**
+     * @param array<string, mixed> $ruleData
+     */
+    private function resolveValueJsonPayload(array $ruleData, string $path): array
+    {
+        if ($this->isCalendarRule($ruleData)) {
+            return $this->buildCalendarValueJson($ruleData, $path);
+        }
+
+        $payload = $ruleData['valueJson'] ?? $ruleData['data'] ?? null;
+        if (!is_array($payload)) {
+            throw new \InvalidArgumentException(sprintf('%s is missing valueJson/data object.', $path));
+        }
+
+        return $payload;
+    }
+
+    /**
+     * @param array<string, mixed> $ruleData
+     */
+    private function isCalendarRule(array $ruleData): bool
+    {
+        $type = $ruleData['ruleType'] ?? null;
+
+        return is_string($type) && 'calendar' === strtolower(trim($type));
+    }
+
+    /**
+     * @param array<string, mixed> $ruleData
+     *
+     * @return array<string, mixed>
+     */
+    private function buildCalendarValueJson(array $ruleData, string $path): array
+    {
+        foreach (['numberOfMonths', 'numberOfWeeks', 'numberOfWeekdays', 'months', 'weeks', 'weekdays'] as $key) {
+            if (!array_key_exists($key, $ruleData)) {
+                throw new \InvalidArgumentException(sprintf('%s is missing required calendar field "%s".', $path, $key));
+            }
+        }
+
+        $months = $this->normalizeCalendarStringList($ruleData['months'], sprintf('%s.months', $path));
+        $weeks = $this->normalizeCalendarStringList($ruleData['weeks'], sprintf('%s.weeks', $path));
+        $weekdays = $this->normalizeCalendarStringList($ruleData['weekdays'], sprintf('%s.weekdays', $path));
+
+        $schemaVersion = 1;
+        if (array_key_exists('schemaVersion', $ruleData)) {
+            if (!is_int($ruleData['schemaVersion'])) {
+                throw new \InvalidArgumentException(sprintf('%s.schemaVersion must be an integer.', $path));
+            }
+            $schemaVersion = $ruleData['schemaVersion'];
+        }
+
+        return [
+            'schemaVersion' => $schemaVersion,
+            'kind' => 'calendar',
+            'numberOfMonths' => $ruleData['numberOfMonths'],
+            'numberOfWeeks' => $ruleData['numberOfWeeks'],
+            'numberOfWeekdays' => $ruleData['numberOfWeekdays'],
+            'months' => $months,
+            'weeks' => $weeks,
+            'weekdays' => $weekdays,
+        ];
+    }
+
+    /**
+     * @param array<mixed> $items
+     *
+     * @return array<int, string>
+     */
+    private function normalizeCalendarStringList(array $items, string $path): array
+    {
+        $out = [];
+        foreach ($items as $index => $item) {
+            if (!is_string($item)) {
+                throw new \InvalidArgumentException(sprintf('%s[%d] must be a string.', $path, $index));
+            }
+            $trimmed = trim($item);
+            if ('' === $trimmed) {
+                throw new \InvalidArgumentException(sprintf('%s[%d] must not be empty or whitespace-only.', $path, $index));
+            }
+            $out[] = $trimmed;
+        }
+
+        return $out;
     }
 
     /**
