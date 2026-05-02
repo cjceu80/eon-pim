@@ -6,27 +6,26 @@
  *
  * Fields Summary:
  * - externalId [input]
- * - source [input]
- * - version [input]
- * - gameWorldTemplate [manyToOneRelation]
+ * - ruleSetTemplateRef [manyToOneRelation]
  * - name [input]
- * - entityType [select]
- * - summary [textarea]
- * - sortOrder [numeric]
+ * - diceNotation [input]
+ * - description [textarea]
+ * - source [input]
+ * - copyrightNotice [input]
+ * - rulesetCode [input]
+ * - tags [manyToManyObjectRelation]
  * - isReadOnly [checkbox]
  * - isActive [checkbox]
- * - tags [manyToManyObjectRelation]
- * - payload [objectbricks]
  */
 
 return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'dao' => NULL,
-   'id' => '9',
-   'name' => 'WorldEntityTemplate',
+   'id' => '12',
+   'name' => 'RollTableTemplate',
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1777650817,
+   'modificationDate' => 1777658868,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -100,71 +99,11 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'defaultValueGenerator' => '',
           )),
           1 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
-             'name' => 'source',
-             'title' => 'Source',
-             'tooltip' => '',
-             'mandatory' => false,
-             'noteditable' => false,
-             'index' => false,
-             'locked' => false,
-             'style' => '',
-             'permissions' => NULL,
-             'fieldtype' => '',
-             'relationType' => false,
-             'invisible' => false,
-             'visibleGridView' => false,
-             'visibleSearch' => false,
-             'blockedVarsForExport' => 
-            array (
-            ),
-             'defaultValue' => '',
-             'columnLength' => 190,
-             'regex' => '',
-             'regexFlags' => 
-            array (
-            ),
-             'unique' => false,
-             'showCharCount' => false,
-             'width' => '',
-             'defaultValueGenerator' => '',
-          )),
-          2 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
-             'name' => 'version',
-             'title' => 'Version',
-             'tooltip' => '',
-             'mandatory' => false,
-             'noteditable' => false,
-             'index' => false,
-             'locked' => false,
-             'style' => '',
-             'permissions' => NULL,
-             'fieldtype' => '',
-             'relationType' => false,
-             'invisible' => false,
-             'visibleGridView' => false,
-             'visibleSearch' => false,
-             'blockedVarsForExport' => 
-            array (
-            ),
-             'defaultValue' => '',
-             'columnLength' => 190,
-             'regex' => '',
-             'regexFlags' => 
-            array (
-            ),
-             'unique' => false,
-             'showCharCount' => false,
-             'width' => '',
-             'defaultValueGenerator' => '',
-          )),
-          3 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation::__set_state(array(
-             'name' => 'gameWorldTemplate',
-             'title' => 'Game World Template',
+             'name' => 'ruleSetTemplateRef',
+             'title' => 'Rule Set Template Ref',
              'tooltip' => '',
-             'mandatory' => true,
+             'mandatory' => false,
              'noteditable' => false,
              'index' => false,
              'locked' => false,
@@ -182,7 +121,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
             array (
               0 => 
               array (
-                'classes' => 'GameWorldTemplate',
+                'classes' => 'RuleSetTemplate',
               ),
             ),
              'displayMode' => 'grid',
@@ -201,7 +140,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
             ),
              'width' => '',
           )),
-          4 => 
+          2 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
              'name' => 'name',
              'title' => 'Name',
@@ -231,12 +170,12 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
              'defaultValueGenerator' => '',
           )),
-          5 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Select::__set_state(array(
-             'name' => 'entityType',
-             'title' => 'Entity Type',
+          3 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'diceNotation',
+             'title' => 'Dice Notation',
              'tooltip' => '',
-             'mandatory' => false,
+             'mandatory' => true,
              'noteditable' => false,
              'index' => false,
              'locked' => false,
@@ -250,38 +189,21 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'blockedVarsForExport' => 
             array (
             ),
-             'options' => 
-            array (
-              0 => 
-              array (
-                'key' => 'location',
-                'value' => 'location',
-              ),
-              1 => 
-              array (
-                'key' => 'npc',
-                'value' => 'npc',
-              ),
-              2 => 
-              array (
-                'key' => 'faction',
-                'value' => 'faction',
-              ),
-            ),
              'defaultValue' => '',
              'columnLength' => 190,
-             'dynamicOptions' => false,
-             'enforceValidation' => false,
-             'defaultValueGenerator' => '',
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
              'width' => '',
-             'optionsProviderType' => 'configure',
-             'optionsProviderClass' => '',
-             'optionsProviderData' => '',
+             'defaultValueGenerator' => '',
           )),
-          6 => 
+          4 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Textarea::__set_state(array(
-             'name' => 'summary',
-             'title' => 'Summary',
+             'name' => 'description',
+             'title' => 'Description',
              'tooltip' => '',
              'mandatory' => false,
              'noteditable' => false,
@@ -303,10 +225,10 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'height' => '',
              'width' => '',
           )),
-          7 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric::__set_state(array(
-             'name' => 'sortOrder',
-             'title' => 'Sort Order',
+          5 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'source',
+             'title' => 'Source',
              'tooltip' => '',
              'mandatory' => false,
              'noteditable' => false,
@@ -322,62 +244,78 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'blockedVarsForExport' => 
             array (
             ),
-             'defaultValue' => NULL,
-             'integer' => true,
-             'unsigned' => false,
-             'minValue' => NULL,
-             'maxValue' => NULL,
+             'defaultValue' => '',
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
              'unique' => false,
-             'decimalSize' => NULL,
-             'decimalPrecision' => NULL,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          6 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'copyrightNotice',
+             'title' => 'Copyright Notice',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => '',
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          7 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'rulesetCode',
+             'title' => 'Ruleset Code',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => '',
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
              'width' => '',
              'defaultValueGenerator' => '',
           )),
           8 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Checkbox::__set_state(array(
-             'name' => 'isReadOnly',
-             'title' => 'Is Read Only',
-             'tooltip' => '',
-             'mandatory' => false,
-             'noteditable' => false,
-             'index' => false,
-             'locked' => false,
-             'style' => '',
-             'permissions' => NULL,
-             'fieldtype' => '',
-             'relationType' => false,
-             'invisible' => false,
-             'visibleGridView' => false,
-             'visibleSearch' => false,
-             'blockedVarsForExport' => 
-            array (
-            ),
-             'defaultValue' => 1,
-             'defaultValueGenerator' => '',
-          )),
-          9 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Checkbox::__set_state(array(
-             'name' => 'isActive',
-             'title' => 'Is Active',
-             'tooltip' => '',
-             'mandatory' => false,
-             'noteditable' => false,
-             'index' => false,
-             'locked' => false,
-             'style' => '',
-             'permissions' => NULL,
-             'fieldtype' => '',
-             'relationType' => false,
-             'invisible' => false,
-             'visibleGridView' => false,
-             'visibleSearch' => false,
-             'blockedVarsForExport' => 
-            array (
-            ),
-             'defaultValue' => 1,
-             'defaultValueGenerator' => '',
-          )),
-          10 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation::__set_state(array(
              'name' => 'tags',
              'title' => 'Tags',
@@ -419,10 +357,10 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
              'height' => '',
           )),
-          11 => 
-          \Pimcore\Model\DataObject\ClassDefinition\Data\Objectbricks::__set_state(array(
-             'name' => 'payload',
-             'title' => 'Payload',
+          9 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Checkbox::__set_state(array(
+             'name' => 'isReadOnly',
+             'title' => 'Is Read Only',
              'tooltip' => '',
              'mandatory' => false,
              'noteditable' => false,
@@ -438,14 +376,30 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'blockedVarsForExport' => 
             array (
             ),
-             'allowedTypes' => 
+             'defaultValue' => 1,
+             'defaultValueGenerator' => '',
+          )),
+          10 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Checkbox::__set_state(array(
+             'name' => 'isActive',
+             'title' => 'Is Active',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
             array (
-              0 => 'EntityFactionBrick',
-              1 => 'EntityLocationBrick',
-              2 => 'EntityNpcBrick',
             ),
-             'maxItems' => 1,
-             'border' => false,
+             'defaultValue' => 1,
+             'defaultValueGenerator' => '',
           )),
         ),
          'locked' => false,

@@ -12,6 +12,7 @@
  * - valueJson [textarea]
  * - sortOrder [numeric]
  * - isReadOnly [checkbox]
+ * - ruleType [select]
  */
 
 return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
@@ -21,7 +22,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1777578219,
+   'modificationDate' => 1777678090,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -267,6 +268,58 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
             ),
              'defaultValue' => 1,
              'defaultValueGenerator' => '',
+          )),
+          7 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Select::__set_state(array(
+             'name' => 'ruleType',
+             'title' => 'Rule Type',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'options' => 
+            array (
+              0 => 
+              array (
+                'key' => 'blob',
+                'value' => 'blob',
+              ),
+              1 => 
+              array (
+                'key' => 'charectaristics_guide',
+                'value' => 'charectaristics_guide',
+              ),
+              2 => 
+              array (
+                'key' => 'table_ref',
+                'value' => 'table_ref',
+              ),
+              3 => 
+              array (
+                'key' => 'formula',
+                'value' => 'formula',
+              ),
+            ),
+             'defaultValue' => '',
+             'columnLength' => 190,
+             'dynamicOptions' => false,
+             'enforceValidation' => false,
+             'defaultValueGenerator' => '',
+             'width' => '',
+             'optionsProviderType' => 'configure',
+             'optionsProviderClass' => '',
+             'optionsProviderData' => '',
           )),
         ),
          'locked' => false,

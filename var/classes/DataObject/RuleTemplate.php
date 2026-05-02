@@ -12,6 +12,7 @@
  * - valueJson [textarea]
  * - sortOrder [numeric]
  * - isReadOnly [checkbox]
+ * - ruleType [select]
  */
 
 namespace Pimcore\Model\DataObject;
@@ -28,6 +29,7 @@ use Pimcore\Model\DataObject\PreGetValueHookInterface;
 * @method static \Pimcore\Model\DataObject\RuleTemplate\Listing|\Pimcore\Model\DataObject\RuleTemplate|null getByValueJson(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RuleTemplate\Listing|\Pimcore\Model\DataObject\RuleTemplate|null getBySortOrder(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RuleTemplate\Listing|\Pimcore\Model\DataObject\RuleTemplate|null getByIsReadOnly(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RuleTemplate\Listing|\Pimcore\Model\DataObject\RuleTemplate|null getByRuleType(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 */
 
 class RuleTemplate extends Concrete
@@ -39,6 +41,7 @@ public const FIELD_DESCRIPTION = 'description';
 public const FIELD_VALUE_JSON = 'valueJson';
 public const FIELD_SORT_ORDER = 'sortOrder';
 public const FIELD_IS_READ_ONLY = 'isReadOnly';
+public const FIELD_RULE_TYPE = 'ruleType';
 
 protected $classId = "6";
 protected $className = "RuleTemplate";
@@ -49,6 +52,7 @@ protected $description;
 protected $valueJson;
 protected $sortOrder;
 protected $isReadOnly;
+protected $ruleType;
 
 
 /**
@@ -316,6 +320,42 @@ public function setIsReadOnly(?bool $isReadOnly): static
 	$this->markFieldDirty("isReadOnly", true);
 
 	$this->isReadOnly = $isReadOnly;
+
+	return $this;
+}
+
+/**
+* Get ruleType - Rule Type
+* @return string|null
+*/
+public function getRuleType(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("ruleType");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->ruleType;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set ruleType - Rule Type
+* @param string|null $ruleType
+* @return $this
+*/
+public function setRuleType(?string $ruleType): static
+{
+	$this->markFieldDirty("ruleType", true);
+
+	$this->ruleType = $ruleType;
 
 	return $this;
 }
