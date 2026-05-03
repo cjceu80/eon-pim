@@ -6,7 +6,7 @@ final class DiceRollSpec
 {
     /**
      * @param int<1, max> $diceCount
-     * @param int<3|4|6|8|10|12|20|100> $diceSides
+     * @param int<1|3|4|6|8|10|12|20|100> $diceSides
      */
     public function __construct(
         private readonly int $diceCount,

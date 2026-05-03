@@ -16,6 +16,7 @@
  * - tags [manyToManyObjectRelation]
  * - isReadOnly [checkbox]
  * - isActive [checkbox]
+ * - tableItems [reverseObjectRelation]
  */
 
 return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
@@ -25,7 +26,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1777658868,
+   'modificationDate' => 1777833480,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -400,6 +401,46 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
             ),
              'defaultValue' => 1,
              'defaultValueGenerator' => '',
+          )),
+          11 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\ReverseObjectRelation::__set_state(array(
+             'name' => 'tableItems',
+             'title' => 'Table Items',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => true,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'classes' => 
+            array (
+            ),
+             'displayMode' => NULL,
+             'pathFormatterClass' => '',
+             'maxItems' => NULL,
+             'visibleFields' => 'minValue,maxValue,valueText',
+             'allowToCreateNewObject' => false,
+             'allowToClearRelation' => true,
+             'optimizedAdminLoading' => false,
+             'enableTextSelection' => false,
+             'visibleFieldDefinitions' => 
+            array (
+            ),
+             'width' => '',
+             'height' => '',
+             'ownerClassName' => 'RollTableEntryTemplate',
+             'ownerClassId' => '13',
+             'ownerFieldName' => 'rollTable',
+             'lazyLoading' => true,
           )),
         ),
          'locked' => false,

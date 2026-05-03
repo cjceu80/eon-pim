@@ -8,6 +8,7 @@ final class DiceNotationParser
      * @var array<int, bool>
      */
     private const ALLOWED_SIDES = [
+        1 => true,
         3 => true,
         4 => true,
         6 => true,
@@ -25,7 +26,18 @@ final class DiceNotationParser
             throw new \InvalidArgumentException('Dice notation cannot be empty.');
         }
 
-        if (!preg_match('/^(Ob)?([1-9][0-9]*)[dDtT](3|4|6|8|10|12|20|100)([+-][0-9]+)?$/', $trimmed, $match)) {
+        // Trivial "manual" tables: single outcome, no real randomness (used e.g. as dice: "1" in YAML).
+        if ('1' === $trimmed) {
+            return new DiceRollSpec(
+                diceCount: 1,
+                diceSides: 1,
+                modifier: 0,
+                openEnded: false,
+                notationRaw: '1'
+            );
+        }
+
+        if (!preg_match('/^(Ob)?([1-9][0-9]*)[dDtT](1|3|4|6|8|10|12|20|100)([+-][0-9]+)?$/', $trimmed, $match)) {
             throw new \InvalidArgumentException(sprintf('Invalid dice notation "%s".', $notation));
         }
 

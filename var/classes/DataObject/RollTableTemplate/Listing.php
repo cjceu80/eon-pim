@@ -150,6 +150,18 @@ public function filterByIsActive ($data, $operator = '='): static
 	return $this;
 }
 
+/**
+* Filter by tableItems (Table Items)
+* @param mixed $data
+* @param string $operator SQL comparison operator, e.g. =, <, >= etc. You can use "?" as placeholder, e.g. "IN (?)"
+* @return $this
+*/
+public function filterByTableItems ($data, $operator = '='): static
+{
+	$this->getClass()->getFieldDefinition("tableItems")->addListingFilter($this, $data, $operator);
+	return $this;
+}
+
 
 
 }

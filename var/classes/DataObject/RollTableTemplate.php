@@ -16,6 +16,7 @@
  * - tags [manyToManyObjectRelation]
  * - isReadOnly [checkbox]
  * - isActive [checkbox]
+ * - tableItems [reverseObjectRelation]
  */
 
 namespace Pimcore\Model\DataObject;
@@ -36,6 +37,7 @@ use Pimcore\Model\DataObject\PreGetValueHookInterface;
 * @method static \Pimcore\Model\DataObject\RollTableTemplate\Listing|\Pimcore\Model\DataObject\RollTableTemplate|null getByTags(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RollTableTemplate\Listing|\Pimcore\Model\DataObject\RollTableTemplate|null getByIsReadOnly(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RollTableTemplate\Listing|\Pimcore\Model\DataObject\RollTableTemplate|null getByIsActive(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RollTableTemplate\Listing|\Pimcore\Model\DataObject\RollTableTemplate|null getByTableItems(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 */
 
 class RollTableTemplate extends Concrete
@@ -51,6 +53,7 @@ public const FIELD_RULESET_CODE = 'rulesetCode';
 public const FIELD_TAGS = 'tags';
 public const FIELD_IS_READ_ONLY = 'isReadOnly';
 public const FIELD_IS_ACTIVE = 'isActive';
+public const FIELD_TABLE_ITEMS = 'tableItems';
 
 protected $classId = "12";
 protected $className = "RollTableTemplate";
@@ -486,6 +489,28 @@ public function setIsActive(?bool $isActive): static
 	$this->isActive = $isActive;
 
 	return $this;
+}
+
+/**
+* Get tableItems - Table Items
+* @return \Pimcore\Model\DataObject\RollTableEntryTemplate[]
+*/
+public function getTableItems(): array
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("tableItems");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->getClass()->getFieldDefinition("tableItems")->preGetData($this);
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
 }
 
 }

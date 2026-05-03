@@ -307,18 +307,15 @@ final class RollTableImporter
         $path = rtrim((string) $parent->getFullPath(), '/');
         $fullPath = sprintf('%s/%s', $path, $key);
         $byPath = DataObject::getByPath($fullPath);
-        if (!is_object($byPath)) {
-            // Legacy flat layout: /Templates/RollTables/<key>
-            $legacyRoot = DataObjectService::createFolderByPath(self::LEGACY_ROLL_TABLES_ROOT);
-            $legacyParentId = (int) $legacyRoot->getId();
-            if ($legacyParentId !== $parentId) {
-                return $this->findTemplateByPath($externalId, $legacyParentId);
-            }
-
-            return null;
+        if (is_object($byPath)) {
+            return $byPath instanceof (self::TEMPLATE_CLASS) ? $byPath : null;
         }
 
-        return $byPath instanceof (self::TEMPLATE_CLASS) ? $byPath : null;
+        // Legacy flat layout: /Templates/RollTables/<key> (lookup only — never create these folders).
+        $legacyFullPath = sprintf('%s/%s', rtrim(self::LEGACY_ROLL_TABLES_ROOT, '/'), $key);
+        $legacyByPath = DataObject::getByPath($legacyFullPath);
+
+        return $legacyByPath instanceof (self::TEMPLATE_CLASS) ? $legacyByPath : null;
     }
 
     /**
