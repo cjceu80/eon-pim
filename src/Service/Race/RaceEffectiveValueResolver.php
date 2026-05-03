@@ -91,7 +91,7 @@ final class RaceEffectiveValueResolver
                 $category,
                 $ruleSet
             ),
-            'parentStatusTableRef' => $this->resolveParentStatusTableRef($category, $ruleSet),
+            'parentStatusTableRef' => $this->resolveParentStatusTableRef($race, $category, $ruleSet),
         ];
     }
 
@@ -277,10 +277,19 @@ final class RaceEffectiveValueResolver
 
     /**
      * Prefer linked RollTableTemplate.externalId, then stored ref string.
-     * Precedence: category > RuleSetTemplate baseline.
+     * Precedence: race > category > RuleSetTemplate baseline.
      */
-    private function resolveParentStatusTableRef(?object $category, ?object $ruleSet): ?string
+    private function resolveParentStatusTableRef(object $race, ?object $category, ?object $ruleSet): ?string
     {
+        $fromRace = $this->resolveParentStatusTableRefFromSource(
+            $race,
+            'getParentStatusTable',
+            'parentStatusTableRef'
+        );
+        if (null !== $fromRace) {
+            return $fromRace;
+        }
+
         if (null !== $category) {
             $fromCategory = $this->resolveParentStatusTableRefFromSource(
                 $category,

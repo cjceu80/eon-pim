@@ -234,5 +234,9 @@ final class RaceImportAnalyzer
         if (isset($race['modifiers']) && !is_array($race['modifiers'])) {
             $stats['errors'][] = sprintf('%s.modifiers must be an object/map if provided.', $path);
         }
+
+        if (array_key_exists('parentStatusTableRef', $race) && null !== $race['parentStatusTableRef'] && !is_string($race['parentStatusTableRef'])) {
+            $stats['errors'][] = sprintf('%s.parentStatusTableRef must be a string if provided.', $path);
+        }
     }
 }

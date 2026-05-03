@@ -437,6 +437,16 @@ final class RaceImporter
             );
         }
 
+        $raceParentStatusRef = $raceData['parentStatusTableRef'] ?? null;
+        if (is_string($raceParentStatusRef) && '' !== trim($raceParentStatusRef)) {
+            $trimmed = trim($raceParentStatusRef);
+            $this->setIfExists($race, 'setParentStatusTableRef', $trimmed);
+            $resolvedParentTable = $this->findRollTableTemplateByExternalId($trimmed);
+            if (null !== $resolvedParentTable) {
+                $this->setIfExists($race, 'setParentStatusTable', $resolvedParentTable);
+            }
+        }
+
         $this->setIfExists($race, 'setIsReadOnly', true);
         $this->setIfExists($race, 'setIsActive', true);
 

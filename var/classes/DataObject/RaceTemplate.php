@@ -20,6 +20,8 @@
  * - tableOverridesJson [textarea]
  * - ruleOverrideJson [textarea]
  * - metadataJson [textarea]
+ * - parentStatusTable [manyToOneRelation]
+ * - parentStatusTableRef [input]
  * - isReadOnly [checkbox]
  * - isActive [checkbox]
  */
@@ -46,6 +48,8 @@ use Pimcore\Model\DataObject\PreGetValueHookInterface;
 * @method static \Pimcore\Model\DataObject\RaceTemplate\Listing|\Pimcore\Model\DataObject\RaceTemplate|null getByTableOverridesJson(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RaceTemplate\Listing|\Pimcore\Model\DataObject\RaceTemplate|null getByRuleOverrideJson(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RaceTemplate\Listing|\Pimcore\Model\DataObject\RaceTemplate|null getByMetadataJson(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RaceTemplate\Listing|\Pimcore\Model\DataObject\RaceTemplate|null getByParentStatusTable(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
+* @method static \Pimcore\Model\DataObject\RaceTemplate\Listing|\Pimcore\Model\DataObject\RaceTemplate|null getByParentStatusTableRef(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RaceTemplate\Listing|\Pimcore\Model\DataObject\RaceTemplate|null getByIsReadOnly(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 * @method static \Pimcore\Model\DataObject\RaceTemplate\Listing|\Pimcore\Model\DataObject\RaceTemplate|null getByIsActive(mixed $value, ?int $limit = null, int $offset = 0, ?array $objectTypes = null)
 */
@@ -67,6 +71,8 @@ public const FIELD_LOW_CHARACTERISTICS_JSON = 'lowCharacteristicsJson';
 public const FIELD_TABLE_OVERRIDES_JSON = 'tableOverridesJson';
 public const FIELD_RULE_OVERRIDE_JSON = 'ruleOverrideJson';
 public const FIELD_METADATA_JSON = 'metadataJson';
+public const FIELD_PARENT_STATUS_TABLE = 'parentStatusTable';
+public const FIELD_PARENT_STATUS_TABLE_REF = 'parentStatusTableRef';
 public const FIELD_IS_READ_ONLY = 'isReadOnly';
 public const FIELD_IS_ACTIVE = 'isActive';
 
@@ -87,6 +93,8 @@ protected $lowCharacteristicsJson;
 protected $tableOverridesJson;
 protected $ruleOverrideJson;
 protected $metadataJson;
+protected $parentStatusTable;
+protected $parentStatusTableRef;
 protected $isReadOnly;
 protected $isActive;
 
@@ -648,6 +656,85 @@ public function setMetadataJson(?string $metadataJson): static
 	$this->markFieldDirty("metadataJson", true);
 
 	$this->metadataJson = $metadataJson;
+
+	return $this;
+}
+
+/**
+* Get parentStatusTable - Parent Status Table
+* @return 
+*/
+public function getParentStatusTable(): ?\Pimcore\Model\Element\AbstractElement
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("parentStatusTable");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->getClass()->getFieldDefinition("parentStatusTable")->preGetData($this);
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set parentStatusTable - Parent Status Table
+* @param  $parentStatusTable
+* @return $this
+*/
+public function setParentStatusTable(?\Pimcore\Model\Element\AbstractElement $parentStatusTable): static
+{
+	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToOneRelation $fd */
+	$fd = $this->getClass()->getFieldDefinition("parentStatusTable");
+	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
+	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
+	$currentData = $this->getParentStatusTable();
+	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
+	$isEqual = $fd->isEqual($currentData, $parentStatusTable);
+	if (!$isEqual) {
+		$this->markFieldDirty("parentStatusTable", true);
+	}
+	$this->parentStatusTable = $fd->preSetData($this, $parentStatusTable);
+	return $this;
+}
+
+/**
+* Get parentStatusTableRef - Parent Status Table Ref
+* @return string|null
+*/
+public function getParentStatusTableRef(): ?string
+{
+	if ($this instanceof PreGetValueHookInterface && !\Pimcore::inAdmin()) {
+		$preValue = $this->preGetValue("parentStatusTableRef");
+		if ($preValue !== null) {
+			return $preValue;
+		}
+	}
+
+	$data = $this->parentStatusTableRef;
+
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set parentStatusTableRef - Parent Status Table Ref
+* @param string|null $parentStatusTableRef
+* @return $this
+*/
+public function setParentStatusTableRef(?string $parentStatusTableRef): static
+{
+	$this->markFieldDirty("parentStatusTableRef", true);
+
+	$this->parentStatusTableRef = $parentStatusTableRef;
 
 	return $this;
 }
