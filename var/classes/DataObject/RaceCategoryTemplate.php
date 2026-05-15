@@ -743,7 +743,7 @@ public function setGenderFormula(?string $genderFormula): static
 
 /**
 * Get apparentAgeTableRef - Apparent Age Table Ref
-* @return 
+* @return \Pimcore\Model\DataObject\RollTableTemplate|null
 */
 public function getApparentAgeTableRef(): ?\Pimcore\Model\Element\AbstractElement
 {
@@ -765,7 +765,7 @@ public function getApparentAgeTableRef(): ?\Pimcore\Model\Element\AbstractElemen
 
 /**
 * Set apparentAgeTableRef - Apparent Age Table Ref
-* @param  $apparentAgeTableRef
+* @param \Pimcore\Model\DataObject\RollTableTemplate|null $apparentAgeTableRef
 * @return $this
 */
 public function setApparentAgeTableRef(?\Pimcore\Model\Element\AbstractElement $apparentAgeTableRef): static

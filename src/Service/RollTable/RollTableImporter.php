@@ -267,7 +267,11 @@ final class RollTableImporter
             $this->setIfExists($entry, 'setEffectLabel', $effect['label'] ?? null);
             // Backward/authoring compatibility: accept both `details` and legacy/simple `rule`.
             $payload = $effect['details'] ?? ($effect['rule'] ?? []);
-            $this->setIfExists($entry, 'setEffectPayloadJson', json_encode($payload, JSON_THROW_ON_ERROR));
+            $this->setIfExists(
+                $entry,
+                'setEffectPayloadJson',
+                json_encode($payload, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE)
+            );
         }
 
         if (!$dryRun) {

@@ -664,7 +664,7 @@ public function setRaceBaselineParentStatusFormula(?string $raceBaselineParentSt
 
 /**
 * Get raceBaselineParentStatusTable - Parent Status Table
-* @return 
+* @return \Pimcore\Model\DataObject\RollTableTemplate|null
 */
 public function getRaceBaselineParentStatusTable(): ?\Pimcore\Model\Element\AbstractElement
 {
@@ -686,7 +686,7 @@ public function getRaceBaselineParentStatusTable(): ?\Pimcore\Model\Element\Abst
 
 /**
 * Set raceBaselineParentStatusTable - Parent Status Table
-* @param  $raceBaselineParentStatusTable
+* @param \Pimcore\Model\DataObject\RollTableTemplate|null $raceBaselineParentStatusTable
 * @return $this
 */
 public function setRaceBaselineParentStatusTable(?\Pimcore\Model\Element\AbstractElement $raceBaselineParentStatusTable): static

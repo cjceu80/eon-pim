@@ -662,7 +662,7 @@ public function setMetadataJson(?string $metadataJson): static
 
 /**
 * Get parentStatusTable - Parent Status Table
-* @return 
+* @return \Pimcore\Model\DataObject\RollTableTemplate|null
 */
 public function getParentStatusTable(): ?\Pimcore\Model\Element\AbstractElement
 {
@@ -684,7 +684,7 @@ public function getParentStatusTable(): ?\Pimcore\Model\Element\AbstractElement
 
 /**
 * Set parentStatusTable - Parent Status Table
-* @param  $parentStatusTable
+* @param \Pimcore\Model\DataObject\RollTableTemplate|null $parentStatusTable
 * @return $this
 */
 public function setParentStatusTable(?\Pimcore\Model\Element\AbstractElement $parentStatusTable): static
