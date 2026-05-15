@@ -9,11 +9,11 @@
  * - professionSkillPointsSuccess [numeric]
  * - professionSkillPointsPerfect [numeric]
  * - professionSkills [advancedManyToManyObjectRelation]
- * - specialSkillPoints [input]
+ * - battleExperience [input]
+ * - spellPoints [input]
  * - otherSkillPointsFail [numeric]
  * - otherSkillPointsSuccess [numeric]
  * - otherSkillPointsPerfect [numeric]
- * - otherSkills [manyToManyObjectRelation]
  * - coinMultipleFail [numeric]
  * - coinMultipleSuccess [numeric]
  * - coinMultiplePerfect [numeric]
@@ -55,11 +55,11 @@ public const FIELD_PROFESSION_SKILL_POINTS_FAIL = 'professionSkillPointsFail';
 public const FIELD_PROFESSION_SKILL_POINTS_SUCCESS = 'professionSkillPointsSuccess';
 public const FIELD_PROFESSION_SKILL_POINTS_PERFECT = 'professionSkillPointsPerfect';
 public const FIELD_PROFESSION_SKILLS = 'professionSkills';
-public const FIELD_SPECIAL_SKILL_POINTS = 'specialSkillPoints';
+public const FIELD_BATTLE_EXPERIENCE = 'battleExperience';
+public const FIELD_SPELL_POINTS = 'spellPoints';
 public const FIELD_OTHER_SKILL_POINTS_FAIL = 'otherSkillPointsFail';
 public const FIELD_OTHER_SKILL_POINTS_SUCCESS = 'otherSkillPointsSuccess';
 public const FIELD_OTHER_SKILL_POINTS_PERFECT = 'otherSkillPointsPerfect';
-public const FIELD_OTHER_SKILLS = 'otherSkills';
 public const FIELD_COIN_MULTIPLE_FAIL = 'coinMultipleFail';
 public const FIELD_COIN_MULTIPLE_SUCCESS = 'coinMultipleSuccess';
 public const FIELD_COIN_MULTIPLE_PERFECT = 'coinMultiplePerfect';
@@ -92,11 +92,11 @@ protected $professionSkillPointsFail;
 protected $professionSkillPointsSuccess;
 protected $professionSkillPointsPerfect;
 protected $professionSkills;
-protected $specialSkillPoints;
+protected $battleExperience;
+protected $spellPoints;
 protected $otherSkillPointsFail;
 protected $otherSkillPointsSuccess;
 protected $otherSkillPointsPerfect;
-protected $otherSkills;
 protected $coinMultipleFail;
 protected $coinMultipleSuccess;
 protected $coinMultiplePerfect;
@@ -385,15 +385,15 @@ public function setProfessionSkills (?array $professionSkills): static
 }
 
 /**
-* Get specialSkillPoints - Special Skill Points
+* Get battleExperience - Battle Experience
 * @return string|null
 */
-public function getSpecialSkillPoints(): ?string
+public function getBattleExperience(): ?string
 {
-	$data = $this->specialSkillPoints;
-	if(\Pimcore\Model\DataObject::doGetInheritedValues($this->getObject()) && $this->getDefinition()->getFieldDefinition("specialSkillPoints")->isEmpty($data)) {
+	$data = $this->battleExperience;
+	if(\Pimcore\Model\DataObject::doGetInheritedValues($this->getObject()) && $this->getDefinition()->getFieldDefinition("battleExperience")->isEmpty($data)) {
 		try {
-			return $this->getValueFromParent("specialSkillPoints");
+			return $this->getValueFromParent("battleExperience");
 		} catch (InheritanceParentNotFoundException $e) {
 			// no data from parent available, continue ...
 		}
@@ -406,13 +406,46 @@ public function getSpecialSkillPoints(): ?string
 }
 
 /**
-* Set specialSkillPoints - Special Skill Points
-* @param string|null $specialSkillPoints
+* Set battleExperience - Battle Experience
+* @param string|null $battleExperience
 * @return $this
 */
-public function setSpecialSkillPoints (?string $specialSkillPoints): static
+public function setBattleExperience (?string $battleExperience): static
 {
-	$this->specialSkillPoints = $specialSkillPoints;
+	$this->battleExperience = $battleExperience;
+
+	return $this;
+}
+
+/**
+* Get spellPoints - Spell Points
+* @return string|null
+*/
+public function getSpellPoints(): ?string
+{
+	$data = $this->spellPoints;
+	if(\Pimcore\Model\DataObject::doGetInheritedValues($this->getObject()) && $this->getDefinition()->getFieldDefinition("spellPoints")->isEmpty($data)) {
+		try {
+			return $this->getValueFromParent("spellPoints");
+		} catch (InheritanceParentNotFoundException $e) {
+			// no data from parent available, continue ...
+		}
+	}
+	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
+		return $data->getPlain();
+	}
+
+	return $data;
+}
+
+/**
+* Set spellPoints - Spell Points
+* @param string|null $spellPoints
+* @return $this
+*/
+public function setSpellPoints (?string $spellPoints): static
+{
+	$this->spellPoints = $spellPoints;
 
 	return $this;
 }
@@ -516,56 +549,6 @@ public function setOtherSkillPointsPerfect (?float $otherSkillPointsPerfect): st
 	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric $fd */
 	$fd = $this->getDefinition()->getFieldDefinition("otherSkillPointsPerfect");
 	$this->otherSkillPointsPerfect = $fd->preSetData($this, $otherSkillPointsPerfect);
-	return $this;
-}
-
-/**
-* Get otherSkills - Other Skills
-* @return \Pimcore\Model\DataObject\SkillGroup[]|\Pimcore\Model\DataObject\Skill[]
-*/
-public function getOtherSkills(): array
-{
-	$data = $this->getDefinition()->getFieldDefinition("otherSkills")->preGetData($this);
-	if(\Pimcore\Model\DataObject::doGetInheritedValues($this->getObject()) && $this->getDefinition()->getFieldDefinition("otherSkills")->isEmpty($data)) {
-		try {
-			return $this->getValueFromParent("otherSkills");
-		} catch (InheritanceParentNotFoundException $e) {
-			// no data from parent available, continue ...
-		}
-	}
-	if ($data instanceof \Pimcore\Model\DataObject\Data\EncryptedField) {
-		return $data->getPlain();
-	}
-
-	return $data;
-}
-
-/**
-* Set otherSkills - Other Skills
-* @param \Pimcore\Model\DataObject\SkillGroup[]|\Pimcore\Model\DataObject\Skill[] $otherSkills
-* @return $this
-*/
-public function setOtherSkills (?array $otherSkills): static
-{
-	/** @var \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation $fd */
-	$fd = $this->getDefinition()->getFieldDefinition("otherSkills");
-	$class = $this->getObject() ? $this->getObject()->getClass() : null;
-	$hideUnpublished = \Pimcore\Model\DataObject\Concrete::getHideUnpublished();
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished(false);
-	if ($class && $class->getAllowInherit()) {
-		$currentData = \Pimcore\Model\DataObject\Service::useInheritedValues(false, function() {
-			return $this->getOtherSkills();
-		});
-	}
-	else {
-		$currentData = $this->getOtherSkills();
-	}	
-	\Pimcore\Model\DataObject\Concrete::setHideUnpublished($hideUnpublished);
-	$isEqual = $fd->isEqual($currentData, $otherSkills);
-	if (!$isEqual) {
-		$this->markFieldDirty("otherSkills", true);
-	}
-	$this->otherSkills = $fd->preSetData($this, $otherSkills);
 	return $this;
 }
 

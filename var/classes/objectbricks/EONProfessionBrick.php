@@ -9,11 +9,11 @@
  * - professionSkillPointsSuccess [numeric]
  * - professionSkillPointsPerfect [numeric]
  * - professionSkills [advancedManyToManyObjectRelation]
- * - specialSkillPoints [input]
+ * - battleExperience [input]
+ * - spellPoints [input]
  * - otherSkillPointsFail [numeric]
  * - otherSkillPointsSuccess [numeric]
  * - otherSkillPointsPerfect [numeric]
- * - otherSkills [manyToManyObjectRelation]
  * - coinMultipleFail [numeric]
  * - coinMultipleSuccess [numeric]
  * - coinMultiplePerfect [numeric]
@@ -301,9 +301,7 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
                  'displayMode' => 'grid',
                  'pathFormatterClass' => '',
                  'maxItems' => NULL,
-                 'visibleFields' => 
-                array (
-                ),
+                 'visibleFields' => NULL,
                  'allowToCreateNewObject' => false,
                  'allowToClearRelation' => true,
                  'optimizedAdminLoading' => false,
@@ -324,8 +322,12 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
                     'label' => 'Amount',
                   ),
                 ),
-                 'allowMultipleAssignments' => false,
+                 'columnKeys' => 
+                array (
+                  0 => 'amount',
+                ),
                  'enableBatchEdit' => false,
+                 'allowMultipleAssignments' => false,
               )),
             ),
              'locked' => false,
@@ -341,8 +343,8 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
           )),
           4 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
-             'name' => 'specialSkillPoints',
-             'title' => 'Special Skill Points',
+             'name' => 'battleExperience',
+             'title' => 'Battle Experience',
              'tooltip' => '',
              'mandatory' => false,
              'noteditable' => false,
@@ -370,6 +372,36 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
              'defaultValueGenerator' => '',
           )),
           5 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+             'name' => 'spellPoints',
+             'title' => 'Spell Points',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'defaultValue' => '',
+             'columnLength' => 190,
+             'regex' => '',
+             'regexFlags' => 
+            array (
+            ),
+             'unique' => false,
+             'showCharCount' => false,
+             'width' => '',
+             'defaultValueGenerator' => '',
+          )),
+          6 => 
           \Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
              'name' => 'OtherSkills',
              'type' => NULL,
@@ -473,52 +505,6 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
                  'width' => '',
                  'defaultValueGenerator' => '',
               )),
-              3 => 
-              \Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation::__set_state(array(
-                 'name' => 'otherSkills',
-                 'title' => 'Other Skills',
-                 'tooltip' => '',
-                 'mandatory' => false,
-                 'noteditable' => false,
-                 'index' => false,
-                 'locked' => false,
-                 'style' => '',
-                 'permissions' => NULL,
-                 'fieldtype' => '',
-                 'relationType' => true,
-                 'invisible' => false,
-                 'visibleGridView' => false,
-                 'visibleSearch' => false,
-                 'blockedVarsForExport' => 
-                array (
-                ),
-                 'classes' => 
-                array (
-                  0 => 
-                  array (
-                    'classes' => 'SkillGroup',
-                  ),
-                  1 => 
-                  array (
-                    'classes' => 'Skill',
-                  ),
-                ),
-                 'displayMode' => 'grid',
-                 'pathFormatterClass' => '',
-                 'maxItems' => NULL,
-                 'visibleFields' => 
-                array (
-                ),
-                 'allowToCreateNewObject' => false,
-                 'allowToClearRelation' => true,
-                 'optimizedAdminLoading' => false,
-                 'enableTextSelection' => false,
-                 'visibleFieldDefinitions' => 
-                array (
-                ),
-                 'width' => '',
-                 'height' => '',
-              )),
             ),
              'locked' => false,
              'blockedVarsForExport' => 
@@ -531,7 +517,7 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
              'labelWidth' => 100,
              'labelAlign' => 'left',
           )),
-          6 => 
+          7 => 
           \Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
              'name' => 'Coin',
              'type' => NULL,
@@ -677,7 +663,7 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
              'labelWidth' => 100,
              'labelAlign' => 'left',
           )),
-          7 => 
+          8 => 
           \Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
              'name' => 'A-Gear',
              'type' => NULL,
@@ -793,7 +779,7 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
              'labelWidth' => 100,
              'labelAlign' => 'left',
           )),
-          8 => 
+          9 => 
           \Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
              'name' => 'B-Gear',
              'type' => NULL,
@@ -909,7 +895,7 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
              'labelWidth' => 100,
              'labelAlign' => 'left',
           )),
-          9 => 
+          10 => 
           \Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
              'name' => 'C-Gear',
              'type' => NULL,
@@ -1025,7 +1011,7 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
              'labelWidth' => 100,
              'labelAlign' => 'left',
           )),
-          10 => 
+          11 => 
           \Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
              'name' => 'D-Gear',
              'type' => NULL,
@@ -1141,7 +1127,7 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
              'labelWidth' => 100,
              'labelAlign' => 'left',
           )),
-          11 => 
+          12 => 
           \Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
              'name' => 'X-Gear',
              'type' => NULL,
@@ -1257,7 +1243,7 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
              'labelWidth' => 100,
              'labelAlign' => 'left',
           )),
-          12 => 
+          13 => 
           \Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
              'name' => 'Connections',
              'type' => NULL,
@@ -1373,7 +1359,7 @@ return \Pimcore\Model\DataObject\Objectbrick\Definition::__set_state(array(
              'labelWidth' => 100,
              'labelAlign' => 'left',
           )),
-          13 => 
+          14 => 
           \Pimcore\Model\DataObject\ClassDefinition\Data\Textarea::__set_state(array(
              'name' => 'other',
              'title' => 'Other',
