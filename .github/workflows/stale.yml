@@ -2,8 +2,6 @@ name: Handle stale issues
 
 on:
   workflow_dispatch:
-  schedule:
-      - cron: '37 7 * * *'
 
 jobs:
   call-stale-workflow:
